@@ -81,4 +81,14 @@ describe('Tuple tests', () => {
       expect(difference.z).toBe(-3);
     });
   });
+
+  describe('negation', () => {
+    it('should negate a tuple', () => {
+      const tuple = new Tuple(1, 2, 3);
+      const negated = tuple.negate();
+      expect(negated.x).toBe(-1);
+      expect(negated.y).toBe(-2);
+      expect(negated.z).toBe(-3);
+    });
+  });
 });

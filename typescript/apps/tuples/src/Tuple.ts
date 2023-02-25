@@ -32,6 +32,10 @@ class Tuple {
   public subtract(t: Tuple): Tuple {
     return new Tuple(this.x - t.x, this.y - t.y, this.z - t.z);
   }
+
+  public negate(): Tuple {
+    return new Tuple(-this.x, -this.y, -this.z);
+  }
 }
 
 export default Tuple;

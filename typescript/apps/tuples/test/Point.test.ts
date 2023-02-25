@@ -1,4 +1,5 @@
 import Point from "../src/Point";
+import Vector from "../src/Vector";
 
 describe('Point tests', () => {
   describe('creation', () => {
@@ -57,6 +58,28 @@ describe('Point tests', () => {
       const point = new Point(1, 2, 3);
       const clone = point.clone();
       expect(point.equals(clone)).toBe(true);
+    });
+  });
+
+  describe('addition of a vector', () => {
+    it('should add a vector to a point', () => {
+      const point = new Point(1, 2, 3);
+      const vector = new Vector(1, 2, 3);
+      const result = point.addVector(vector);
+      expect(result.x).toBe(2);
+      expect(result.y).toBe(4);
+      expect(result.z).toBe(6);
+    });
+  });
+
+  describe('subtraction of a vector', () => {
+    it('should subtract a vector from a point', () => {
+      const point = new Point(1, 2, 3);
+      const vector = new Vector(1, 2, 3);
+      const result = point.subtractVector(vector);
+      expect(result.x).toBe(0);
+      expect(result.y).toBe(0);
+      expect(result.z).toBe(0);
     });
   });
 });

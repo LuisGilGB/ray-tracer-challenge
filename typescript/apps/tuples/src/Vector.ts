@@ -5,6 +5,7 @@ class Vector {
 
   constructor(x: number, y: number, z: number) {
     this.tuple = new Tuple(x, y, z);
+    Object.freeze(this);
   }
 
   get x(): number {
@@ -43,8 +44,24 @@ class Vector {
     return new Vector(this.x, this.y, this.z);
   }
 
+  asTuple(): Tuple {
+    return this.tuple.clone();
+  }
+
   equals(vector: Vector): boolean {
-    return this.tuple.equals(vector.tuple);
+    return this.tuple.equals(vector.asTuple());
+  }
+
+  add(vector: Vector): Vector {
+    return Vector.fromTuple(this.tuple.add(vector.asTuple()));
+  }
+
+  subtract(vector: Vector): Vector {
+    return Vector.fromTuple(this.tuple.subtract(vector.asTuple()));
+  }
+
+  negate(): Vector {
+    return Vector.fromTuple(this.tuple.negate());
   }
 }
 
