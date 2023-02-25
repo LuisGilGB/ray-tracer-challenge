@@ -62,6 +62,22 @@ impl Tuple {
             z: -self.z,
         }
     }
+
+    pub fn scalar_mul(&self, scalar: CoordValue) -> Tuple {
+        Tuple {
+            x: self.x * scalar,
+            y: self.y * scalar,
+            z: self.z * scalar,
+        }
+    }
+
+    pub fn scalar_div(&self, scalar: CoordValue) -> Tuple {
+        Tuple {
+            x: self.x / scalar,
+            y: self.y / scalar,
+            z: self.z / scalar,
+        }
+    }
 }
 
 #[cfg(test)]
@@ -147,5 +163,23 @@ mod tests {
         assert_eq!(p2.x, -1.0);
         assert_eq!(p2.y, 2.0);
         assert_eq!(p2.z, -3.0);
+    }
+
+    #[test]
+    fn it_should_scalar_mul_tuples() {
+        let p1 = Tuple::from_array([1.0, -2.0, 3.0]);
+        let p2 = p1.scalar_mul(3.5);
+        assert_eq!(p2.x, 3.5);
+        assert_eq!(p2.y, -7.0);
+        assert_eq!(p2.z, 10.5);
+    }
+
+    #[test]
+    fn it_should_scalar_div_tuples() {
+        let p1 = Tuple::from_array([1.0, -2.0, 3.0]);
+        let p2 = p1.scalar_div(2.0);
+        assert_eq!(p2.x, 0.5);
+        assert_eq!(p2.y, -1.0);
+        assert_eq!(p2.z, 1.5);
     }
 }

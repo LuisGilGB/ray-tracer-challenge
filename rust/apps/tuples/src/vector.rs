@@ -68,11 +68,55 @@ impl Vector {
             tuple: self.tuple.neg(),
         }
     }
+
+    pub fn scalar_mul(&self, scalar: CoordValue) -> Vector {
+        Vector {
+            tuple: self.tuple.scalar_mul(scalar),
+        }
+    }
+
+    pub fn scalar_div(&self, scalar: CoordValue) -> Vector {
+        Vector {
+            tuple: self.tuple.scalar_div(scalar),
+        }
+    }
+
+    pub fn magnitude(&self) -> CoordValue {
+        f32::sqrt(
+            self.tuple.x * self.tuple.x + self.tuple.y * self.tuple.y + self.tuple.z * self.tuple.z,
+        )
+    }
+
+    pub fn normalize(&self) -> Vector {
+        let mag = self.magnitude();
+        Vector {
+            tuple: Tuple {
+                x: self.tuple.x / mag,
+                y: self.tuple.y / mag,
+                z: self.tuple.z / mag,
+            },
+        }
+    }
+
+    pub fn dot(&self, other: &Vector) -> CoordValue {
+        self.tuple.x * other.tuple.x + self.tuple.y * other.tuple.y + self.tuple.z * other.tuple.z
+    }
+
+    pub fn cross(&self, other: &Vector) -> Vector {
+        Vector {
+            tuple: Tuple {
+                x: self.tuple.y * other.tuple.z - self.tuple.z * other.tuple.y,
+                y: self.tuple.z * other.tuple.x - self.tuple.x * other.tuple.z,
+                z: self.tuple.x * other.tuple.y - self.tuple.y * other.tuple.x,
+            },
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    const EPSILON: CoordValue = 0.0000001;
 
     #[test]
     fn test_new() {
@@ -179,5 +223,102 @@ mod tests {
         assert_eq!(v2.tuple.x, -1.0);
         assert_eq!(v2.tuple.y, -2.0);
         assert_eq!(v2.tuple.z, -3.0);
+    }
+
+    #[test]
+    fn test_scalar_mul() {
+        let v1 = Vector::new(1.0, 2.0, 3.0);
+        let v2 = v1.scalar_mul(2.0);
+        assert_eq!(v2.tuple.x, 2.0);
+        assert_eq!(v2.tuple.y, 4.0);
+        assert_eq!(v2.tuple.z, 6.0);
+    }
+
+    #[test]
+    fn test_scalar_div() {
+        let v1 = Vector::new(1.0, 2.0, 3.0);
+        let v2 = v1.scalar_div(2.0);
+        assert_eq!(v2.tuple.x, 0.5);
+        assert_eq!(v2.tuple.y, 1.0);
+        assert_eq!(v2.tuple.z, 1.5);
+    }
+
+    #[test]
+    fn test_magnitude() {
+        let v1 = Vector::new(1.0, 2.0, 3.0);
+        assert!(v1.magnitude() - f32::sqrt(14.0) < EPSILON);
+    }
+
+    #[test]
+    fn test_magnitude_of_1_0_0_is_1() {
+        let v1 = Vector::new(1.0, 0.0, 0.0);
+        assert!(v1.magnitude() - 1.0 < EPSILON);
+    }
+
+    #[test]
+    fn test_magnitude_of_0_1_0_is_1() {
+        let v1 = Vector::new(0.0, 1.0, 0.0);
+        assert!(v1.magnitude() - 1.0 < EPSILON);
+    }
+
+    #[test]
+    fn test_magnitude_of_0_0_1_is_1() {
+        let v1 = Vector::new(0.0, 0.0, 1.0);
+        assert!(v1.magnitude() - 1.0 < EPSILON);
+    }
+
+    #[test]
+    fn test_magnitude_of_neg_1_0_0_is_1() {
+        let v1 = Vector::new(-1.0, 0.0, 0.0);
+        assert!(v1.magnitude() - 1.0 < EPSILON);
+    }
+
+    #[test]
+    fn test_magnitude_of_0_neg_1_0_is_1() {
+        let v1 = Vector::new(0.0, -1.0, 0.0);
+        assert!(v1.magnitude() - 1.0 < EPSILON);
+    }
+
+    #[test]
+    fn test_magnitude_of_0_0_neg_1_is_1() {
+        let v1 = Vector::new(0.0, 0.0, -1.0);
+        assert!(v1.magnitude() - 1.0 < EPSILON);
+    }
+
+    #[test]
+    fn test_normalize() {
+        let v1 = Vector::new(1.0, 2.0, 3.0);
+        let v2 = v1.normalize();
+        assert!(v2.as_tuple().x - 1.0 / f32::sqrt(14.0) < EPSILON);
+        assert!(v2.as_tuple().y - 2.0 / f32::sqrt(14.0) < EPSILON);
+        assert!(v2.as_tuple().z - 3.0 / f32::sqrt(14.0) < EPSILON);
+    }
+
+    #[test]
+    fn test_magnitude_of_normalized_vector_is_1() {
+        let v1 = Vector::new(1.0, 2.0, 3.0);
+        let v2 = v1.normalize();
+        assert!(v2.magnitude() - 1.0 < EPSILON);
+    }
+
+    #[test]
+    fn test_dot_product() {
+        let v1 = Vector::new(1.0, 2.0, 3.0);
+        let v2 = Vector::new(2.0, 3.0, 4.0);
+        assert!(v1.dot(&v2) - 20.0 < EPSILON);
+    }
+
+    #[test]
+    fn test_cross_product() {
+        let v1 = Vector::new(1.0, 2.0, 3.0);
+        let v2 = Vector::new(2.0, 3.0, 4.0);
+        let v3 = v1.cross(&v2);
+        assert_eq!(v3.tuple.x, -1.0);
+        assert_eq!(v3.tuple.y, 2.0);
+        assert_eq!(v3.tuple.z, -1.0);
+        let v4 = v2.cross(&v1);
+        assert_eq!(v4.tuple.x, 1.0);
+        assert_eq!(v4.tuple.y, -2.0);
+        assert_eq!(v4.tuple.z, 1.0);
     }
 }

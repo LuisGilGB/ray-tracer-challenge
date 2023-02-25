@@ -63,6 +63,34 @@ class Vector {
   negate(): Vector {
     return Vector.fromTuple(this.tuple.negate());
   }
+
+  multiply(scalar: number): Vector {
+    return Vector.fromTuple(this.tuple.multiply(scalar));
+  }
+
+  divide(scalar: number): Vector {
+    return Vector.fromTuple(this.tuple.divide(scalar));
+  }
+
+  magnitude(): number {
+    return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+  }
+
+  normalize(): Vector {
+    return this.divide(this.magnitude());
+  }
+
+  dot(vector: Vector): number {
+    return this.x * vector.x + this.y * vector.y + this.z * vector.z;
+  }
+
+  cross(vector: Vector): Vector {
+    return new Vector(
+      this.y * vector.z - this.z * vector.y,
+      this.z * vector.x - this.x * vector.z,
+      this.x * vector.y - this.y * vector.x
+    );
+  }
 }
 
 export default Vector;

@@ -101,4 +101,98 @@ describe('Vector tests', () => {
       expect(negated.z).toBe(-3);
     });
   });
+
+  describe('multiplication', () => {
+    it('should multiply a vector by a scalar', () => {
+      const vector = new Vector(1, 2, 3);
+      const product = vector.multiply(2);
+      expect(product.x).toBe(2);
+      expect(product.y).toBe(4);
+      expect(product.z).toBe(6);
+    });
+  });
+
+  describe('division', () => {
+    it('should divide a vector by a scalar', () => {
+      const vector = new Vector(1, 2, 3);
+      const quotient = vector.divide(2);
+      expect(quotient.x).toBe(0.5);
+      expect(quotient.y).toBe(1);
+      expect(quotient.z).toBe(1.5);
+    });
+  });
+
+  describe('magnitude', () => {
+    it('should calculate the magnitude of a vector', () => {
+      const vector = new Vector(1, 2, 3);
+      expect(vector.magnitude()).toBe(Math.sqrt(14));
+    });
+
+    it('should return 1 as the magnitude of (1, 0, 0)', () => {
+      const vector = new Vector(1, 0, 0);
+      expect(vector.magnitude()).toBe(1);
+    });
+
+    it('should return 1 as the magnitude of (0, 1, 0)', () => {
+      const vector = new Vector(0, 1, 0);
+      expect(vector.magnitude()).toBe(1);
+    });
+
+    it('should return 1 as the magnitude of (0, 0, 1)', () => {
+      const vector = new Vector(0, 0, 1);
+      expect(vector.magnitude()).toBe(1);
+    });
+  });
+
+  describe('normalization', () => {
+    it('should normalize a vector', () => {
+      const vector = new Vector(1, 2, 3);
+      const normalized = vector.normalize();
+      expect(normalized.x).toBe(1 / Math.sqrt(14));
+      expect(normalized.y).toBe(2 / Math.sqrt(14));
+      expect(normalized.z).toBe(3 / Math.sqrt(14));
+    });
+
+    it('should normalize a vector with a magnitude of 1', () => {
+      const vector = new Vector(1, 0, 0);
+      const normalized = vector.normalize();
+      expect(normalized.x).toBe(1);
+      expect(normalized.y).toBe(0);
+      expect(normalized.z).toBe(0);
+    });
+
+    it('should return 1 as the magnitude of a normalized vector', () => {
+      const vector = new Vector(1, 2, 3);
+      const normalized = vector.normalize();
+      expect(normalized.magnitude()).toBe(1);
+    });
+  });
+
+  describe('dot product', () => {
+    it('should calculate the dot product of two vectors', () => {
+      const vector1 = new Vector(1, 2, 3);
+      const vector2 = new Vector(2, 3, 4);
+      expect(vector1.dot(vector2)).toBe(20);
+    });
+  });
+
+  describe('cross product', () => {
+    it('should calculate the cross product of two vectors', () => {
+      const vector1 = new Vector(1, 2, 3);
+      const vector2 = new Vector(2, 3, 4);
+      const cross = vector1.cross(vector2);
+      expect(cross.x).toBe(-1);
+      expect(cross.y).toBe(2);
+      expect(cross.z).toBe(-1);
+    });
+
+    it('should calculate the cross product of two vectors in the opposite direction', () => {
+      const vector1 = new Vector(1, 2, 3);
+      const vector2 = new Vector(2, 3, 4);
+      const cross = vector2.cross(vector1);
+      expect(cross.x).toBe(1);
+      expect(cross.y).toBe(-2);
+      expect(cross.z).toBe(1);
+    });
+  });
 });

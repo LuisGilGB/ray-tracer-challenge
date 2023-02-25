@@ -36,6 +36,14 @@ class Tuple {
   public negate(): Tuple {
     return new Tuple(-this.x, -this.y, -this.z);
   }
+
+  public multiply(s: number): Tuple {
+    return new Tuple(this.x * s, this.y * s, this.z * s);
+  }
+
+  public divide(s: number): Tuple {
+    return new Tuple(this.x / s, this.y / s, this.z / s);
+  }
 }
 
 export default Tuple;

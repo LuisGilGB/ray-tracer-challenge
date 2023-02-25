@@ -91,4 +91,24 @@ describe('Tuple tests', () => {
       expect(negated.z).toBe(-3);
     });
   });
+
+  describe('multiplication', () => {
+    it('should multiply a tuple by a scalar', () => {
+      const tuple = new Tuple(1, 2, 3);
+      const product = tuple.multiply(2);
+      expect(product.x).toBe(2);
+      expect(product.y).toBe(4);
+      expect(product.z).toBe(6);
+    });
+  });
+
+  describe('division', () => {
+    it('should divide a tuple by a scalar', () => {
+      const tuple = new Tuple(1, 2, 3);
+      const quotient = tuple.divide(2);
+      expect(quotient.x).toBe(0.5);
+      expect(quotient.y).toBe(1);
+      expect(quotient.z).toBe(1.5);
+    });
+  });
 });
