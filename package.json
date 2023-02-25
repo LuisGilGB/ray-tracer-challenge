@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "workspaces": [
-    "ts-apps/*",
-    "ts-packages/*"
+    "typescript/apps/*",
+    "typescript/packages/*"
   ],
   "scripts": {
     "build": "turbo run build",
