@@ -20,6 +20,14 @@ class Vector {
     return this.tuple.z;
   }
 
+  format(): string {
+    return `(${this.tuple.format()})`;
+  }
+
+  print() {
+    console.log(`Vector: (${this.format()})`);
+  }
+
   static fromTuple(tuple: Tuple): Vector {
     return new Vector(tuple.x, tuple.y, tuple.z);
   }

@@ -21,6 +21,14 @@ class Point {
     return this.tuple.z;
   }
 
+  format(): string {
+    return `(${this.tuple.format()})`;
+  }
+
+  print() {
+    console.log(`Point: ${this.format()}`);
+  }
+
   static fromNumbers(x: number, y: number, z: number): Point {
     return new Point(x, y, z);
   }

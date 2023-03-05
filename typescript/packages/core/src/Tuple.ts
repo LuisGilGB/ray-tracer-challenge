@@ -21,6 +21,14 @@ class Tuple {
     return [this.x, this.y, this.z];
   }
 
+  format(): string {
+    return `(${this.x}, ${this.y}, ${this.z})`;
+  }
+
+  print() {
+    console.log(`Tuple: (${this.format()})`);
+  }
+
   public equals(t: Tuple): boolean {
     return this.x === t.x && this.y === t.y && this.z === t.z;
   }
