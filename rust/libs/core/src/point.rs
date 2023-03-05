@@ -1,6 +1,7 @@
 use crate::tuple::{CoordValue, Tuple};
 use crate::vector::Vector;
 
+#[derive(Debug, Clone)]
 pub struct Point {
     tuple: Tuple,
 }
@@ -34,22 +35,12 @@ impl Point {
         }
     }
 
-    pub fn clone(&self) -> Point {
-        Point {
-            tuple: self.tuple.clone(),
-        }
-    }
-
     pub fn as_tuple(&self) -> Tuple {
         self.tuple.clone()
     }
 
     pub fn as_coordinates(&self) -> (CoordValue, CoordValue, CoordValue) {
         (self.tuple.x, self.tuple.y, self.tuple.z)
-    }
-
-    pub fn eq(&self, other: &Point) -> bool {
-        self.tuple.eq(&other.tuple)
     }
 
     pub fn add_vector(&self, other: &Vector) -> Point {
@@ -62,6 +53,12 @@ impl Point {
         Point {
             tuple: self.tuple.sub(&other.as_tuple()),
         }
+    }
+}
+
+impl PartialEq for Point {
+    fn eq(&self, other: &Point) -> bool {
+        self.tuple.eq(&other.tuple)
     }
 }
 

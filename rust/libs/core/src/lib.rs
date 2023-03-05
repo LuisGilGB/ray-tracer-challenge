@@ -3,5 +3,4 @@ pub mod tuple;
 pub mod vector;
 
 #[cfg(test)]
-mod tests {
-}
+mod tests {}

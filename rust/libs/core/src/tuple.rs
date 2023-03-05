@@ -1,5 +1,6 @@
 pub type CoordValue = f32;
 
+#[derive(Debug, Clone)]
 pub struct Tuple {
     pub x: CoordValue,
     pub y: CoordValue,
@@ -25,18 +26,6 @@ impl Tuple {
             y: t.1,
             z: t.2,
         }
-    }
-
-    pub fn clone(&self) -> Tuple {
-        Tuple {
-            x: self.x,
-            y: self.y,
-            z: self.z,
-        }
-    }
-
-    pub fn eq(&self, other: &Tuple) -> bool {
-        self.x == other.x && self.y == other.y && self.z == other.z
     }
 
     pub fn add(&self, other: &Tuple) -> Tuple {
@@ -77,6 +66,12 @@ impl Tuple {
             y: self.y / scalar,
             z: self.z / scalar,
         }
+    }
+}
+
+impl PartialEq for Tuple {
+    fn eq(&self, other: &Tuple) -> bool {
+        self.x == other.x && self.y == other.y && self.z == other.z
     }
 }
 
