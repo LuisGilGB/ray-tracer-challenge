@@ -28,6 +28,18 @@ impl Tuple {
         }
     }
 
+    pub fn x(&self) -> CoordValue {
+        self.x
+    }
+
+    pub fn y(&self) -> CoordValue {
+        self.y
+    }
+
+    pub fn z(&self) -> CoordValue {
+        self.z
+    }
+
     pub fn add(&self, other: &Tuple) -> Tuple {
         Tuple {
             x: self.x + other.x,
@@ -66,6 +78,10 @@ impl Tuple {
             y: self.y / scalar,
             z: self.z / scalar,
         }
+    }
+
+    pub fn format(&self) -> String {
+        format!("({}, {}, {})", self.x, self.y, self.z)
     }
 }
 

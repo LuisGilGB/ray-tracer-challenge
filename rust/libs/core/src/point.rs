@@ -54,6 +54,22 @@ impl Point {
             tuple: self.tuple.sub(&other.as_tuple()),
         }
     }
+
+    pub fn format(&self) -> String {
+        self.tuple.format()
+    }
+
+    pub fn x(&self) -> CoordValue {
+        self.tuple.x()
+    }
+
+    pub fn y(&self) -> CoordValue {
+        self.tuple.y()
+    }
+
+    pub fn z(&self) -> CoordValue {
+        self.tuple.z()
+    }
 }
 
 impl PartialEq for Point {
