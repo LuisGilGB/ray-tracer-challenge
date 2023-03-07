@@ -59,4 +59,47 @@ describe('Color tests', () => {
       expect(color.equals(clone)).toBe(true);
     });
   });
+
+  describe('addition', () => {
+    it('should add two colors', () => {
+      const color1 = new Color(1, 2, 3);
+      const color2 = new Color(4, 5, 6);
+      const result = color1.add(color2);
+      expect(result.red).toBe(5);
+      expect(result.green).toBe(7);
+      expect(result.blue).toBe(9);
+    });
+  });
+
+  describe('subtraction', () => {
+    it('should subtract two colors', () => {
+      const color1 = new Color(1, 2, 3);
+      const color2 = new Color(4, 5, 6);
+      const result = color1.subtract(color2);
+      expect(result.red).toBe(-3);
+      expect(result.green).toBe(-3);
+      expect(result.blue).toBe(-3);
+    });
+  });
+
+  describe('multiplication by a scalar', () => {
+    it('should multiply a color by a scalar', () => {
+      const color = new Color(1, 2, 3);
+      const result = color.multiply(2);
+      expect(result.red).toBe(2);
+      expect(result.green).toBe(4);
+      expect(result.blue).toBe(6);
+    });
+  });
+
+  describe('multiplication by a color', () => {
+    it('should multiply two colors', () => {
+      const color1 = new Color(1, 2, 3);
+      const color2 = new Color(4, 5, 6);
+      const result = color1.hadamardProduct(color2);
+      expect(result.red).toBe(4);
+      expect(result.green).toBe(10);
+      expect(result.blue).toBe(18);
+    });
+  });
 });

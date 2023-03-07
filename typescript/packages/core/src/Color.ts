@@ -51,6 +51,26 @@ class Color {
   equals(color: Color): boolean {
     return this.tuple.equals(color.tuple);
   }
+
+  add(color: Color): Color {
+    return Color.fromTuple(this.tuple.add(color.tuple));
+  }
+
+  subtract(color: Color): Color {
+    return Color.fromTuple(this.tuple.subtract(color.tuple));
+  }
+
+  multiply(scalar: number): Color {
+    return Color.fromTuple(this.tuple.multiply(scalar));
+  }
+
+  hadamardProduct(color: Color): Color {
+    return Color.fromObject({
+      red: this.red * color.red,
+      green: this.green * color.green,
+      blue: this.blue * color.blue,
+    });
+  }
 }
 
 export default Color;
