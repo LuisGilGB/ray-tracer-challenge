@@ -68,5 +68,11 @@ describe('Canvas tests', () => {
       expect(lines[5]).toBe('255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204');
       expect(lines[6]).toBe('153 255 204 153 255 204 153 255 204 153 255 204 153');
     });
+
+    it('should end with a newline', () => {
+      const canvas = new Canvas(5, 3);
+      const ppm = canvas.toPPM();
+      expect(ppm[ppm.length - 1]).toBe('\r');
+    });
   });
 });

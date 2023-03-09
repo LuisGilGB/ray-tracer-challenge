@@ -42,7 +42,7 @@ class Canvas {
       }
       lines.push(line);
     }
-    return lines.join('\r');
+    return lines.join('\r').concat('\r');
   }
 }
 

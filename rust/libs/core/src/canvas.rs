@@ -142,4 +142,11 @@ mod tests {
             "153 255 204 153 255 204 153 255 204 153 255 204 153"
         );
     }
+
+    #[test]
+    fn test_to_ppm_ends_with_newline() {
+        let c = Canvas::new(5, 3);
+        let ppm = c.to_ppm();
+        assert_eq!(ppm.chars().last().unwrap(), '\r');
+    }
 }
