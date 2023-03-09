@@ -25,17 +25,40 @@ impl Canvas {
 
     pub fn to_ppm(&self) -> String {
         let mut ppm = String::new();
-        ppm.push_str("P3\r");
+        const PPM_HEADER: &str = "P3";
+        const MAX_COLOR_VALUE: u8 = 255;
+        const MAX_LINE_LENGTH: usize = 70;
+        ppm.push_str(&format!("{PPM_HEADER}\r"));
         ppm.push_str(&format!("{} {}\r", self.width, self.height));
-        ppm.push_str(&format!("{}\r", 255));
+        ppm.push_str(&format!("{MAX_COLOR_VALUE}\r"));
+        fn cap_number(min: f32, max: f32, n: f32) -> f32 {
+            if n < min {
+                min
+            } else if n > max {
+                max
+            } else {
+                n
+            }
+        }
+        let scale_color =
+            |n: f32| -> u8 { (cap_number(0.0, 1.0, n) * MAX_COLOR_VALUE as f32).round() as u8 };
         for y in 0..self.height {
             let mut line = String::new();
             for x in 0..self.width {
-                let color = self.pixel_at(x, y);
-                let r = (color.red() * 255.0).round() as u8;
-                let g = (color.green() * 255.0).round() as u8;
-                let b = (color.blue() * 255.0).round() as u8;
-                line.push_str(&format!("{r} {g} {b} "));
+                let pixel = self.pixel_at(x, y);
+                let colors = [pixel.red(), pixel.green(), pixel.blue()]
+                    .iter()
+                    .map(|c| scale_color(*c))
+                    .map(|c| c.to_string())
+                    .collect::<Vec<String>>();
+                for color in colors {
+                    if line.len() + color.len() >= MAX_LINE_LENGTH {
+                        line = String::from(line.trim());
+                        ppm.push_str(&format!("{line}\r",));
+                        line = String::new();
+                    }
+                    line.push_str(&format!("{color} "));
+                }
             }
             line = String::from(line.trim());
             ppm.push_str(&format!("{line}\r",));
@@ -89,5 +112,34 @@ mod tests {
         assert_eq!(lines[3], "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0");
         assert_eq!(lines[4], "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0");
         assert_eq!(lines[5], "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255");
+    }
+
+    #[test]
+    fn test_to_ppm_splitting() {
+        let mut c = Canvas::new(10, 2);
+        let color = Color::new(1.0, 0.8, 0.6);
+        for y in 0..c.height {
+            for x in 0..c.width {
+                c.write_pixel(x, y, color.clone());
+            }
+        }
+        let ppm = c.to_ppm();
+        let lines: Vec<&str> = ppm.split('\r').collect();
+        assert_eq!(
+            lines[3],
+            "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204"
+        );
+        assert_eq!(
+            lines[4],
+            "153 255 204 153 255 204 153 255 204 153 255 204 153"
+        );
+        assert_eq!(
+            lines[5],
+            "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204"
+        );
+        assert_eq!(
+            lines[6],
+            "153 255 204 153 255 204 153 255 204 153 255 204 153"
+        );
     }
 }

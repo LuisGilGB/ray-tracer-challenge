@@ -52,5 +52,21 @@ describe('Canvas tests', () => {
       expect(lines[4]).toBe('0 0 0 0 0 0 0 128 0 0 0 0 0 0 0');
       expect(lines[5]).toBe('0 0 0 0 0 0 0 0 0 0 0 0 0 0 255');
     });
+
+    it('should split long lines', () => {
+      const canvas = new Canvas(10, 2);
+      const color = new Color(1, 0.8, 0.6);
+      for (let y = 0; y < canvas.height; y++) {
+        for (let x = 0; x < canvas.width; x++) {
+          canvas.writePixel(x, y, color);
+        }
+      }
+      const ppm = canvas.toPPM();
+      const lines = ppm.split('\r');
+      expect(lines[3]).toBe('255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204');
+      expect(lines[4]).toBe('153 255 204 153 255 204 153 255 204 153 255 204 153');
+      expect(lines[5]).toBe('255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204');
+      expect(lines[6]).toBe('153 255 204 153 255 204 153 255 204 153 255 204 153');
+    });
   });
 });
