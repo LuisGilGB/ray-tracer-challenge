@@ -1,4 +1,5 @@
-import { Point, Vector } from "core";
+import { Canvas, Color, Point, Vector } from "core";
+import * as fs from "fs";
 
 export class Projectile {
   constructor(
@@ -29,9 +30,10 @@ export const tick = (environment: Environment, projectile: Projectile): Projecti
 };
 
 const main = () => {
+  const canvas = new Canvas(800, 320);
   let projectile = new Projectile(
-    new Point(0, 1, 0),
-    new Vector(1, 1, 0).normalize(),
+    new Point(0, 32, 0),
+    new Vector(3, 2, 0).normalize().multiply(10),
   );
   const environment = new Environment(
     new Vector(0, -0.1, 0),
@@ -40,8 +42,15 @@ const main = () => {
 
   while (projectile.position.y > 0 || projectile.velocity.y > 0) {
     projectile = tick(environment, projectile);
-    console.log('The current projectile situation is', projectile.print());
+    projectile.print();
+    const x = Math.round(projectile.position.x);
+    const y = Math.round(canvas.height - projectile.position.y);
+    if (x >= 0 && x < canvas.width && y >= 0 && y < canvas.height) {
+      canvas.writePixel(x, y, new Color(1, 1, 1));
+    }
   }
+  canvas.toPPM();
+  fs.writeFileSync("projectile.ppm", canvas.toPPM());
 }
 
 main();
