@@ -49,7 +49,6 @@ const main = () => {
       canvas.writePixel(x, y, new Color(1, 1, 1));
     }
   }
-  canvas.toPPM();
   fs.writeFileSync("projectile.ppm", canvas.toPPM());
 }
 
