@@ -1,4 +1,5 @@
-import Matrix from "../src/Matrix";
+import Matrix from "../src/Matrix"
+import Tuple from "../src/Tuple";
 
 describe('Matrix tests', () => {
   describe("Matrix creation", () => {
@@ -93,6 +94,29 @@ describe('Matrix tests', () => {
       const matrix1 = Matrix.fromString('1 2 3\n4 5 6\n7 8 9');
       const matrix2 = Matrix.fromString('1 2 3\n4 5 6\n7 8 8');
       expect(matrix1.equals(matrix2)).toBe(false);
+    });
+  });
+
+  describe('Matrix operations', () => {
+    describe('Matrix multiplication', () => {
+      it('should multiply two matrices', () => {
+        const matrix1 = Matrix.fromString('1 2 3 4\n5 6 7 8\n9 8 7 6\n5 4 3 2');
+        const matrix2 = Matrix.fromString('-2 1 2 3\n3 2 1 -1\n4 3 6 5\n1 2 7 8');
+        const result = matrix1.multiply(matrix2);
+        expect(result.matrix).toEqual([
+          [20, 22, 50, 48],
+          [44, 54, 114, 108],
+          [40, 58, 110, 102],
+          [16, 26, 46, 42],
+        ]);
+      });
+
+      it('should multiply by a tuple', () => {
+        const matrix = Matrix.fromString('1 2 3 4\n2 4 4 2\n8 6 4 1\n0 0 0 1');
+        const tuple = new Tuple(1, 2, 3, 1);
+        const result = matrix.multiplyTuple(tuple);
+        expect(result).toEqual([18, 24, 33, 1]);
+      });
     });
   });
 });

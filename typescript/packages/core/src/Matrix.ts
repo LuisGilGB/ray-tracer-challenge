@@ -1,8 +1,12 @@
+import Tuple from "./Tuple";
+
 class Matrix {
   private _matrix: number[][];
 
-  constructor() {
-    this._matrix = [];
+  constructor(rows = 0, columns = 0) {
+    this._matrix = Array(rows)
+      .fill(0)
+      .map(() => Array(columns).fill(0));
   }
 
   public static fromString(str: string): Matrix {
@@ -13,6 +17,12 @@ class Matrix {
         .split(" ")
         .map((num) => parseFloat(num))
       );
+    return matrix;
+  }
+
+  public static fromArray(arr: number[][]): Matrix {
+    const matrix = new Matrix();
+    matrix._matrix = arr;
     return matrix;
   }
 
@@ -52,6 +62,20 @@ class Matrix {
       .every((row, i) => row
         .every((num, j) => num === other.getElementAt(i, j))
       );
+  }
+
+  public multiply(other: Matrix): Matrix {
+    const result = new Matrix(this.rows.length, other.columns.length);
+    result._matrix = result._matrix.map((resultRow, rowIndex) => resultRow
+      .map((_, columnIndex) => this.getRow(rowIndex)
+        .reduce((sum, value, i) => sum + value * other.getElementAt(i, columnIndex), 0)
+      )
+    );
+    return result;
+  }
+
+  public multiplyTuple(tuple: Tuple): Tuple {
+    return Tuple.fromArray(this.multiply(Matrix.fromArray([tuple.toArray()])).matrix[0]);
   }
 }
 
