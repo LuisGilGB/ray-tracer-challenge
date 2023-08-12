@@ -183,6 +183,67 @@ describe('Matrix tests', () => {
     });
   });
 
+  describe('Matrix submatrices', () => {
+    it('should successfully return the submatrix of a 3x3 matrix', () => {
+      const matrix = Matrix.fromString('1 5 0\n-3 2 7\n0 6 -3');
+      const submatrix = Matrix.fromString('-3 2\n0 6');
+      expect(matrix.getSubmatrix(0, 2)).toEqual(submatrix);
+    });
+
+    it('should successfully return the submatrix of a 4x4 matrix', () => {
+      const matrix = Matrix.fromString(
+        '-6 1 1 6\n-8 5 8 6\n-1 0 8 2\n-7 1 -1 1',
+      );
+      const submatrix = Matrix.fromString('-6 1 6\n-8 8 6\n-7 -1 1');
+      expect(matrix.getSubmatrix(2, 1)).toEqual(submatrix);
+    });
+  });
+
+  describe('Determinant of a matrix', () => {
+    it('should calculate the determinant of a 2x2 matrix', () => {
+      const matrix = Matrix.fromString('1 5\n-3 2');
+      expect(matrix.getDeterminant()).toBe(17);
+    });
+
+    it('should calculate the determinant of a 3x3 matrix', () => {
+      const matrix = Matrix.fromString('1 2 6\n-5 8 -4\n2 6 4');
+      expect(matrix.getCofactor(0, 0)).toBe(56);
+      expect(matrix.getCofactor(0, 1)).toBe(12);
+      expect(matrix.getCofactor(0, 2)).toBe(-46);
+      expect(matrix.getDeterminant()).toBe(-196);
+    });
+
+    it('should calculate the determinant of a 4x4 matrix', () => {
+      const matrix = Matrix.fromString(
+        '-2 -8 3 5\n-3 1 7 3\n1 2 -9 6\n-6 7 7 -9',
+      );
+      expect(matrix.getCofactor(0, 0)).toBe(690);
+      expect(matrix.getCofactor(0, 1)).toBe(447);
+      expect(matrix.getCofactor(0, 2)).toBe(210);
+      expect(matrix.getCofactor(0, 3)).toBe(51);
+      expect(matrix.getDeterminant()).toBe(-4071);
+    });
+  });
+
+  describe('Minors of a matrix', () => {
+    it('should calculate the minor for a 3x3 matrix', () => {
+      const matrix = Matrix.fromString('3 5 0\n2 -1 -7\n6 -1 5');
+      const submatrix = matrix.getSubmatrix(1, 0);
+      expect(submatrix.getDeterminant()).toBe(25);
+      expect(matrix.getMinor(1, 0)).toBe(25);
+    });
+  });
+
+  describe('Cofactors of a matrix', () => {
+    it('should calculate the cofactor for a 3x3 matrix', () => {
+      const matrix = Matrix.fromString('3 5 0\n2 -1 -7\n6 -1 5');
+      expect(matrix.getMinor(0, 0)).toBe(-12);
+      expect(matrix.getCofactor(0, 0)).toBe(-12);
+      expect(matrix.getMinor(1, 0)).toBe(25);
+      expect(matrix.getCofactor(1, 0)).toBe(-25);
+    });
+  });
+
   describe('Matrix operations', () => {
     describe('Matrix multiplication', () => {
       it('should multiply two matrices', () => {

@@ -6,6 +6,8 @@ class Matrix {
 
   private constructor(values: number[][]) {
     this._matrix = values;
+    Object.freeze(this._matrix);
+    Object.freeze(this);
   }
 
   public get rows(): number {
@@ -129,6 +131,14 @@ class Matrix {
     return new Matrix(this.getColumnArrays());
   }
 
+  public getSubmatrix(row: number, column: number): Matrix {
+    return new Matrix(
+      this.getRowArrays()
+        .filter((_, i) => i !== row)
+        .map(row => row.filter((_, j) => j !== column)),
+    );
+  }
+
   public at(row: number, column: number): number {
     return this._matrix[row][column];
   }
@@ -157,6 +167,29 @@ class Matrix {
   public multiplyVector(vector: Vector): Vector {
     const matrix = this.multiply(Matrix.fromVector(vector).getTranspose());
     return matrix.getColumnVector(0);
+  }
+
+  public getDeterminant(): number {
+    if (this.rows === 2 && this.columns === 2) {
+      return this.at(0, 0) * this.at(1, 1) - this.at(0, 1) * this.at(1, 0);
+    } else {
+      const rowIndex = 0;
+      const rowVector = this.getRowVector(rowIndex);
+      const cofactorsVector = rowVector.map((_, colIndex) =>
+        this.getCofactor(rowIndex, colIndex),
+      );
+      return rowVector.dot(cofactorsVector);
+    }
+  }
+
+  public getMinor(row: number, column: number): number {
+    return this.getSubmatrix(row, column).getDeterminant();
+  }
+
+  public getCofactor(row: number, column: number): number {
+    return (row + column) % 2 === 0
+      ? this.getMinor(row, column)
+      : -this.getMinor(row, column);
   }
 }
 

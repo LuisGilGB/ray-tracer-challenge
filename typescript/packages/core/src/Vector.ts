@@ -79,6 +79,10 @@ class Vector {
       .toArray()
       .reduce((sum, value, i) => sum + value * vector.at(i), 0);
   }
+
+  map(fn: (value: number, index: number) => number): Vector {
+    return Vector.fromTuple(this.tuple.map(fn));
+  }
 }
 
 export default Vector;

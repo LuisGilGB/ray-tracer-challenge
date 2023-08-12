@@ -61,6 +61,10 @@ class Tuple {
   divide(scalar: number) {
     return new Tuple(...this.values.map(value => value / scalar));
   }
+
+  map(fn: (value: number, index: number) => number) {
+    return new Tuple(...this.values.map(fn));
+  }
 }
 
 export default Tuple;
