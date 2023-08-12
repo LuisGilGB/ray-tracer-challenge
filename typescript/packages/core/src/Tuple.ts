@@ -1,60 +1,65 @@
 class Tuple {
-  constructor(
-    public x: number,
-    public y: number,
-    public z: number,
-  ) {}
+  protected readonly values: number[];
 
-  static fromArray(arr: number[]): Tuple {
-    return new Tuple(arr[0], arr[1], arr[2]);
+  constructor(...values: number[]) {
+    this.values = values;
+    Object.freeze(this);
   }
 
-  static fromObject(obj: {x: number; y: number; z: number}): Tuple {
-    return new Tuple(obj.x, obj.y, obj.z);
+  static fromArray(arr: number[]) {
+    return new Tuple(...arr);
   }
 
-  static fromTuple(t: Tuple): Tuple {
-    return new Tuple(t.x, t.y, t.z);
+  static fromTuple(tuple: Tuple) {
+    return new Tuple(...tuple.values);
   }
 
-  clone(): Tuple {
-    return new Tuple(this.x, this.y, this.z);
+  clone() {
+    return new Tuple(...this.values);
   }
 
-  toArray(): number[] {
-    return [this.x, this.y, this.z];
+  toArray() {
+    return [...this.values];
   }
 
-  format(): string {
-    return `(${this.x}, ${this.y}, ${this.z})`;
+  format() {
+    return `(${this.values.join(', ')})`;
   }
 
   print() {
     console.log(`Tuple: (${this.format()})`);
   }
 
-  public equals(t: Tuple): boolean {
-    return this.x === t.x && this.y === t.y && this.z === t.z;
+  size() {
+    return this.values.length;
   }
 
-  public add(t: Tuple): Tuple {
-    return new Tuple(this.x + t.x, this.y + t.y, this.z + t.z);
+  at(index: number) {
+    return this.values[index];
   }
 
-  public subtract(t: Tuple): Tuple {
-    return new Tuple(this.x - t.x, this.y - t.y, this.z - t.z);
+  equals(tuple: Tuple) {
+    return this.values.every((value, i) => value === tuple.values[i]);
   }
 
-  public negate(): Tuple {
-    return new Tuple(-this.x, -this.y, -this.z);
+  add(tuple: Tuple) {
+    return new Tuple(...this.values.map((value, i) => value + tuple.values[i]));
   }
 
-  public multiply(s: number): Tuple {
-    return new Tuple(this.x * s, this.y * s, this.z * s);
+  subtract(tuple: Tuple) {
+    return new Tuple(...this.values.map((value, i) => value - tuple.values[i]));
   }
 
-  public divide(s: number): Tuple {
-    return new Tuple(this.x / s, this.y / s, this.z / s);
+  negate() {
+    return new Tuple(...this.values.map(value => -value));
+  }
+
+  multiply(scalar: number) {
+    return new Tuple(...this.values.map(value => value * scalar));
+  }
+
+  divide(scalar: number) {
+    return new Tuple(...this.values.map(value => value / scalar));
   }
 }
 

@@ -1,23 +1,23 @@
-import Tuple from "./Tuple";
+import Tuple3D from './Tuple3D';
 
 class Color {
-  private tuple: Tuple;
+  private tuple: Tuple3D;
 
   constructor(red: number, green: number, blue: number) {
-    this.tuple = new Tuple(red, green, blue);
+    this.tuple = new Tuple3D(red, green, blue);
     Object.freeze(this);
   }
 
   get red(): number {
-    return this.tuple.x;
+    return this.tuple.at(0);
   }
 
   get green(): number {
-    return this.tuple.y;
+    return this.tuple.at(1);
   }
 
   get blue(): number {
-    return this.tuple.z;
+    return this.tuple.at(2);
   }
 
   static fromNumbers(red: number, green: number, blue: number): Color {
@@ -28,11 +28,11 @@ class Color {
     return new Color(array[0], array[1], array[2]);
   }
 
-  static fromTuple(tuple: Tuple): Color {
-    return new Color(tuple.x, tuple.y, tuple.z);
+  static fromTuple(tuple: Tuple3D): Color {
+    return new Color(tuple.at(0), tuple.at(1), tuple.at(2));
   }
 
-  static fromObject(obj: {red: number, green: number, blue: number}): Color {
+  static fromObject(obj: {red: number; green: number; blue: number}): Color {
     return new Color(obj.red, obj.green, obj.blue);
   }
 
@@ -44,7 +44,7 @@ class Color {
     return new Color(this.red, this.green, this.blue);
   }
 
-  asTuple(): Tuple {
+  asTuple(): Tuple3D {
     return this.tuple.clone();
   }
 

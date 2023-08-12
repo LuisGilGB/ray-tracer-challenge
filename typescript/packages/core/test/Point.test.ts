@@ -1,5 +1,5 @@
-import Point from "../src/Point";
-import Vector from "../src/Vector";
+import Point from '../src/Point';
+import Vector3D from '../src/Vector3D';
 
 describe('Point tests', () => {
   describe('creation', () => {
@@ -64,7 +64,7 @@ describe('Point tests', () => {
   describe('addition of a vector', () => {
     it('should add a vector to a point', () => {
       const point = new Point(1, 2, 3);
-      const vector = new Vector(1, 2, 3);
+      const vector = new Vector3D(1, 2, 3);
       const result = point.addVector(vector);
       expect(result.x).toBe(2);
       expect(result.y).toBe(4);
@@ -75,7 +75,7 @@ describe('Point tests', () => {
   describe('subtraction of a vector', () => {
     it('should subtract a vector from a point', () => {
       const point = new Point(1, 2, 3);
-      const vector = new Vector(1, 2, 3);
+      const vector = new Vector3D(1, 2, 3);
       const result = point.subtractVector(vector);
       expect(result.x).toBe(0);
       expect(result.y).toBe(0);

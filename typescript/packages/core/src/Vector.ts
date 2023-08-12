@@ -1,26 +1,34 @@
-import Tuple from "./Tuple";
+import Tuple from './Tuple';
 
 class Vector {
-  private tuple: Tuple;
+  protected readonly tuple: Tuple;
 
-  constructor(x: number, y: number, z: number) {
-    this.tuple = new Tuple(x, y, z);
+  constructor(...values: number[]) {
+    this.tuple = new Tuple(...values);
     Object.freeze(this);
   }
 
-  get x(): number {
-    return this.tuple.x;
+  static fromTuple(tuple: Tuple): Vector {
+    return new Vector(...tuple.toArray());
   }
 
-  get y(): number {
-    return this.tuple.y;
+  static fromArray(arr: number[]): Vector {
+    return new Vector(...arr);
   }
 
-  get z(): number {
-    return this.tuple.z;
+  clone(): Vector {
+    return Vector.fromTuple(this.tuple);
   }
 
-  format(): string {
+  toArray(): number[] {
+    return this.tuple.toArray();
+  }
+
+  toTuple(): Tuple {
+    return this.tuple;
+  }
+
+  format() {
     return `(${this.tuple.format()})`;
   }
 
@@ -28,44 +36,20 @@ class Vector {
     console.log(`Vector: (${this.format()})`);
   }
 
-  static fromTuple(tuple: Tuple): Vector {
-    return new Vector(tuple.x, tuple.y, tuple.z);
-  }
-
-  static fromNumbers(x: number, y: number, z: number): Vector {
-    return new Vector(x, y, z);
-  }
-
-  static fromArray(array: number[]): Vector {
-    return new Vector(array[0], array[1], array[2]);
-  }
-
-  static fromVector(vector: Vector): Vector {
-    return new Vector(vector.x, vector.y, vector.z);
-  }
-
-  static fromObject(obj: {x: number, y: number, z: number}): Vector {
-    return new Vector(obj.x, obj.y, obj.z);
-  }
-
-  clone(): Vector {
-    return new Vector(this.x, this.y, this.z);
-  }
-
-  asTuple(): Tuple {
-    return this.tuple.clone();
+  at(index: number): number {
+    return this.tuple.at(index);
   }
 
   equals(vector: Vector): boolean {
-    return this.tuple.equals(vector.asTuple());
+    return this.tuple.equals(vector.tuple);
   }
 
   add(vector: Vector): Vector {
-    return Vector.fromTuple(this.tuple.add(vector.asTuple()));
+    return Vector.fromTuple(this.tuple.add(vector.tuple));
   }
 
   subtract(vector: Vector): Vector {
-    return Vector.fromTuple(this.tuple.subtract(vector.asTuple()));
+    return Vector.fromTuple(this.tuple.subtract(vector.tuple));
   }
 
   negate(): Vector {
@@ -81,7 +65,9 @@ class Vector {
   }
 
   magnitude(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    return Math.sqrt(
+      this.tuple.toArray().reduce((sum, value) => sum + value ** 2, 0),
+    );
   }
 
   normalize(): Vector {
@@ -89,15 +75,9 @@ class Vector {
   }
 
   dot(vector: Vector): number {
-    return this.x * vector.x + this.y * vector.y + this.z * vector.z;
-  }
-
-  cross(vector: Vector): Vector {
-    return new Vector(
-      this.y * vector.z - this.z * vector.y,
-      this.z * vector.x - this.x * vector.z,
-      this.x * vector.y - this.y * vector.x
-    );
+    return this.tuple
+      .toArray()
+      .reduce((sum, value, i) => sum + value * vector.at(i), 0);
   }
 }
 

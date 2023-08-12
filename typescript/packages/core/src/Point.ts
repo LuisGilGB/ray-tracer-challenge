@@ -1,32 +1,24 @@
-import Tuple from "./Tuple";
-import Vector from "./Vector";
+import Tuple3D from './Tuple3D';
+import Vector3D from './Vector3D';
 
 class Point {
-  private tuple: Tuple;
+  private tuple: Tuple3D;
 
   constructor(x: number, y: number, z: number) {
-    this.tuple = new Tuple(x, y, z);
+    this.tuple = new Tuple3D(x, y, z);
     Object.freeze(this);
   }
 
   get x(): number {
-    return this.tuple.x;
+    return this.tuple.at(0);
   }
 
   get y(): number {
-    return this.tuple.y;
+    return this.tuple.at(1);
   }
 
   get z(): number {
-    return this.tuple.z;
-  }
-
-  format(): string {
-    return `(${this.tuple.format()})`;
-  }
-
-  print() {
-    console.log(`Point: ${this.format()}`);
+    return this.tuple.at(2);
   }
 
   static fromNumbers(x: number, y: number, z: number): Point {
@@ -37,11 +29,11 @@ class Point {
     return new Point(array[0], array[1], array[2]);
   }
 
-  static fromTuple(tuple: Tuple): Point {
-    return new Point(tuple.x, tuple.y, tuple.z);
+  static fromTuple(tuple: Tuple3D): Point {
+    return new Point(tuple.at(0), tuple.at(1), tuple.at(2));
   }
 
-  static fromObject(obj: {x: number, y: number, z: number}): Point {
+  static fromObject(obj: {x: number; y: number; z: number}): Point {
     return new Point(obj.x, obj.y, obj.z);
   }
 
@@ -49,11 +41,19 @@ class Point {
     return new Point(point.x, point.y, point.z);
   }
 
+  format(): string {
+    return `(${this.tuple.format()})`;
+  }
+
+  print() {
+    console.log(`Point: ${this.format()}`);
+  }
+
   clone(): Point {
     return new Point(this.x, this.y, this.z);
   }
 
-  asTuple(): Tuple {
+  asTuple(): Tuple3D {
     return this.tuple.clone();
   }
 
@@ -61,12 +61,12 @@ class Point {
     return this.tuple.equals(point.tuple);
   }
 
-  addVector(vector: Vector): Point {
-    return Point.fromTuple(this.tuple.add(vector.asTuple()));
+  addVector(vector: Vector3D): Point {
+    return Point.fromTuple(this.tuple.add(vector.toTuple()));
   }
 
-  subtractVector(vector: Vector): Point {
-    return Point.fromTuple(this.tuple.subtract(vector.asTuple()));
+  subtractVector(vector: Vector3D): Point {
+    return Point.fromTuple(this.tuple.subtract(vector.toTuple()));
   }
 }
 
