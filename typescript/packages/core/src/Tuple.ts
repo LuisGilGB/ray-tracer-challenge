@@ -1,11 +1,15 @@
 class Tuple {
-  constructor(public x: number, public y: number, public z: number) {}
+  constructor(
+    public x: number,
+    public y: number,
+    public z: number,
+  ) {}
 
   static fromArray(arr: number[]): Tuple {
     return new Tuple(arr[0], arr[1], arr[2]);
   }
 
-  static fromObject(obj: {x: number, y: number, z: number}): Tuple {
+  static fromObject(obj: {x: number; y: number; z: number}): Tuple {
     return new Tuple(obj.x, obj.y, obj.z);
   }
 
