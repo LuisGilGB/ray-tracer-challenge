@@ -164,6 +164,25 @@ describe('Matrix tests', () => {
     });
   });
 
+  describe('Matrix transposition', () => {
+    it('should return the transpose matrix', () => {
+      const matrix = Matrix.fromString('0 9 3 0\n9 8 0 8\n1 8 5 3\n0 0 5 8');
+      const transpose = Matrix.fromString('0 9 1 0\n9 8 8 0\n3 0 5 5\n0 8 3 8');
+      expect(matrix.getTranspose()).toEqual(transpose);
+    });
+
+    it('should return the transpose matrix of a 3x2 matrix', () => {
+      const matrix = Matrix.fromString('1 2\n3 4\n5 6');
+      const transpose = Matrix.fromString('1 3 5\n2 4 6');
+      expect(matrix.getTranspose()).toEqual(transpose);
+    });
+
+    it('should return the identity matrix when getting the transpose of the identity matrix', () => {
+      const identityMatrix = Matrix.identity(4);
+      expect(identityMatrix.getTranspose()).toEqual(identityMatrix);
+    });
+  });
+
   describe('Matrix operations', () => {
     describe('Matrix multiplication', () => {
       it('should multiply two matrices', () => {
@@ -192,6 +211,13 @@ describe('Matrix tests', () => {
         const vector = new Vector(1, 2, 3, 1);
         const result = matrix.multiplyVector(vector);
         expect(result.toArray()).toEqual([18, 24, 33, 1]);
+      });
+
+      it('should return the original matrix when multiplied by the identity matrix', () => {
+        const matrix = Matrix.fromString('1 2 3 4\n2 4 4 2\n8 6 4 1\n0 0 0 1');
+        const identity = Matrix.identity(4);
+        const result = matrix.multiply(identity);
+        expect(result).toEqual(matrix);
       });
     });
   });
