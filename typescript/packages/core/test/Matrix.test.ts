@@ -242,6 +242,16 @@ describe('Matrix tests', () => {
       expect(matrix.getMinor(1, 0)).toBe(25);
       expect(matrix.getCofactor(1, 0)).toBe(-25);
     });
+
+    it('should calculate the cofactors matrix for a 4x4 matrix', () => {
+      const matrix = Matrix.fromString(
+        '-5 2 6 -8\n1 -5 1 8\n7 7 -6 -7\n1 -3 7 4',
+      );
+      const cofactors = Matrix.fromString(
+        '116 -430 -42 -278\n240 -775 -119 -433\n128 -236 -28 -160\n-24 277 105 163',
+      );
+      expect(matrix.getCofactorsMatrix()).toEqual(cofactors);
+    });
   });
 
   describe('Matrix operations', () => {
@@ -279,6 +289,91 @@ describe('Matrix tests', () => {
         const identity = Matrix.identity(4);
         const result = matrix.multiply(identity);
         expect(result).toEqual(matrix);
+      });
+    });
+
+    describe('Matrix inversion', () => {
+      it('should tell if a matrix is invertible', () => {
+        const matrix = Matrix.fromString(
+          '6 4 4 4\n5 5 7 6\n4 -9 3 -7\n9 1 7 -6',
+        );
+        expect(matrix.isInvertible()).toBe(true);
+      });
+
+      it('should tell if a matrix is not invertible', () => {
+        const matrix = Matrix.fromString(
+          '-4 2 -2 -3\n9 6 2 6\n0 -5 1 -5\n0 0 0 0',
+        );
+        expect(matrix.isInvertible()).toBe(false);
+      });
+
+      it('should invert a matrix', () => {
+        const matrix = Matrix.fromString(
+          '-5 2 6 -8\n1 -5 1 8\n7 7 -6 -7\n1 -3 7 4',
+        );
+        const inverse = Matrix.fromString(
+          '0.21805 0.45113 0.24060 -0.04511\n-0.80827 -1.45677 -0.44361 0.52068\n-0.07895 -0.22368 -0.05263 0.19737\n-0.52256 -0.81391 -0.30075 0.30639',
+        );
+        expect(matrix.getDeterminant()).toBe(532);
+        expect(matrix.getCofactor(2, 3)).toBe(-160);
+        expect(inverse.at(3, 2)).toBeCloseTo(-160 / 532);
+        expect(matrix.getCofactor(3, 2)).toBe(105);
+        expect(inverse.at(2, 3)).toBeCloseTo(105 / 532);
+        matrix.getInverse().forEach((value, rowIndex, colIndex) => {
+          expect(value).toBeCloseTo(inverse.at(rowIndex, colIndex), 5);
+        });
+      });
+
+      it('should invert another matrix', () => {
+        const matrix = Matrix.fromString(
+          '8 -5 9 2\n7 5 6 1\n-6 0 9 6\n-3 0 -9 -4',
+        );
+        const inverse = Matrix.fromString(
+          '-0.15385 -0.15385 -0.28205 -0.53846\n-0.07692 0.12308 0.02564 0.03077\n0.35897 0.35897 0.43590 0.92308\n-0.69231 -0.69231 -0.76923 -1.92308',
+        );
+        matrix.getInverse().forEach((value, rowIndex, colIndex) => {
+          expect(value).toBeCloseTo(inverse.at(rowIndex, colIndex), 5);
+        });
+      });
+
+      it('should invert a third matrix', () => {
+        const matrix = Matrix.fromString(
+          '9 3 0 9\n-5 -2 -6 -3\n-4 9 6 4\n-7 6 6 2',
+        );
+        const inverse = Matrix.fromString(
+          '-0.04074 -0.07778 0.14444 -0.22222\n-0.07778 0.03333 0.36667 -0.33333\n-0.02901 -0.14630 -0.10926 0.12963\n0.17778 0.06667 -0.26667 0.33333',
+        );
+        matrix.getInverse().forEach((value, rowIndex, colIndex) => {
+          expect(value).toBeCloseTo(inverse.at(rowIndex, colIndex), 5);
+        });
+      });
+
+      it('should validate that if A * B = C, then C * B^-1 = A', () => {
+        const matrixA = Matrix.fromString(
+          '3 -9 7 3\n3 -8 2 -9\n-4 4 4 1\n-6 5 -1 1',
+        );
+        const matrixB = Matrix.fromString(
+          '8 2 2 2\n3 -1 7 0\n7 0 5 4\n6 -2 0 5',
+        );
+        const matrixC = matrixA.multiply(matrixB);
+        matrixC
+          .multiply(matrixB.getInverse())
+          .forEach((value, rowIndex, colIndex) => {
+            expect(value).toBeCloseTo(matrixA.at(rowIndex, colIndex), 5);
+          });
+      });
+
+      it('should return the identity matrix when a matrix is multiplied by its inverse', () => {
+        const matrix = Matrix.fromString(
+          '3 -9 7 3\n3 -8 2 -9\n-4 4 4 1\n-6 5 -1 1',
+        );
+        const inverse = matrix.getInverse();
+        matrix.multiply(inverse).forEach((value, rowIndex, colIndex) => {
+          expect(value).toBeCloseTo(
+            Matrix.identity(4).at(rowIndex, colIndex),
+            5,
+          );
+        });
       });
     });
   });

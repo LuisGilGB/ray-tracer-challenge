@@ -71,6 +71,10 @@ class Matrix {
     console.log(`Matrix:\n${this.format()}`);
   }
 
+  public isSquare(): boolean {
+    return this.rows === this.columns;
+  }
+
   public getRow(row: number): Tuple {
     return Tuple.fromArray(this._matrix[row]);
   }
@@ -131,14 +135,6 @@ class Matrix {
     return new Matrix(this.getColumnArrays());
   }
 
-  public getSubmatrix(row: number, column: number): Matrix {
-    return new Matrix(
-      this.getRowArrays()
-        .filter((_, i) => i !== row)
-        .map(row => row.filter((_, j) => j !== column)),
-    );
-  }
-
   public at(row: number, column: number): number {
     return this._matrix[row][column];
   }
@@ -149,24 +145,24 @@ class Matrix {
     );
   }
 
-  public multiply(other: Matrix): Matrix {
-    const firstMatrixRows = this.getRowVectors();
-    const secondMatrixColumns = other.getColumnVectors();
-    return new Matrix(
-      firstMatrixRows.map(column =>
-        secondMatrixColumns.map(row => row.dot(column)),
-      ),
+  public forEach(fn: (num: number, row: number, column: number) => void): void {
+    this._matrix.forEach((row, rowIndex) =>
+      row.forEach((num, colIndex) => fn(num, rowIndex, colIndex)),
     );
   }
 
-  public multiplyTuple(tuple: Tuple): Tuple {
-    const matrix = this.multiply(Matrix.fromTuple(tuple).getTranspose());
-    return matrix.getColumn(0);
+  public map(fn: (num: number, row: number, column: number) => number): Matrix {
+    return new Matrix(
+      this._matrix.map((row, i) => row.map((num, j) => fn(num, i, j))),
+    );
   }
 
-  public multiplyVector(vector: Vector): Vector {
-    const matrix = this.multiply(Matrix.fromVector(vector).getTranspose());
-    return matrix.getColumnVector(0);
+  public getSubmatrix(row: number, column: number): Matrix {
+    return new Matrix(
+      this.getRowArrays()
+        .filter((_, i) => i !== row)
+        .map(row => row.filter((_, j) => j !== column)),
+    );
   }
 
   public getDeterminant(): number {
@@ -190,6 +186,44 @@ class Matrix {
     return (row + column) % 2 === 0
       ? this.getMinor(row, column)
       : -this.getMinor(row, column);
+  }
+
+  public getCofactorsMatrix(): Matrix {
+    return this.map((_, i, j) => this.getCofactor(i, j));
+  }
+
+  public multiply(other: Matrix): Matrix {
+    const firstMatrixRows = this.getRowVectors();
+    const secondMatrixColumns = other.getColumnVectors();
+    return new Matrix(
+      firstMatrixRows.map(column =>
+        secondMatrixColumns.map(row => row.dot(column)),
+      ),
+    );
+  }
+
+  public multiplyTuple(tuple: Tuple): Tuple {
+    const matrix = this.multiply(Matrix.fromTuple(tuple).getTranspose());
+    return matrix.getColumn(0);
+  }
+
+  public multiplyVector(vector: Vector): Vector {
+    const matrix = this.multiply(Matrix.fromVector(vector).getTranspose());
+    return matrix.getColumnVector(0);
+  }
+
+  public isInvertible(): boolean {
+    return this.getDeterminant() !== 0;
+  }
+
+  public getInverse(): Matrix {
+    const determinant = this.getDeterminant();
+    if (determinant === 0) {
+      throw new Error('Matrix is not invertible');
+    }
+    return this.getCofactorsMatrix()
+      .getTranspose()
+      .map(num => num / determinant);
   }
 }
 
