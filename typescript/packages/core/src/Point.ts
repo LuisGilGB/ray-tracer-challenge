@@ -53,7 +53,11 @@ class Point {
     return new Point(this.x, this.y, this.z);
   }
 
-  asTuple(): Tuple3D {
+  toArray(): number[] {
+    return this.tuple.toArray();
+  }
+
+  toTuple(): Tuple3D {
     return this.tuple.clone();
   }
 

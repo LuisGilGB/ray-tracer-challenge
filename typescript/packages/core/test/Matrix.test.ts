@@ -375,6 +375,24 @@ describe('Matrix tests', () => {
           );
         });
       });
+
+      it('should validate that the inverse of the identity matrix is the identity matrix', () => {
+        const identity = Matrix.identity(4);
+        identity.getInverse().forEach((value, rowIndex, colIndex) => {
+          expect(value).toBeCloseTo(identity.at(rowIndex, colIndex), 5);
+        });
+      });
+
+      it('should validate that the transpose of the inverse is equal to the inverse of the transpose', () => {
+        const matrix = Matrix.fromString(
+          '3 -9 7 3\n3 -8 2 -9\n-4 4 4 1\n-6 5 -1 1',
+        );
+        const result1 = matrix.getInverse().getTranspose();
+        const result2 = matrix.getTranspose().getInverse();
+        result1.forEach((value, rowIndex, colIndex) => {
+          expect(value).toBeCloseTo(result2.at(rowIndex, colIndex), 5);
+        });
+      });
     });
   });
 });
