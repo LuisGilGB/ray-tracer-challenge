@@ -1,6 +1,7 @@
 import Matrix from '../Matrix';
 import Point from '../Point';
 import Tuple from '../Tuple';
+import Vector3D from '../Vector3D';
 
 class Shearing3D {
   private readonly _matrix: Matrix;
@@ -54,6 +55,12 @@ class Shearing3D {
       this._matrix
         .multiplyTuple(Tuple.fromArray([...point.toArray(), 1]))
         .toArray(),
+    );
+  }
+
+  shearVector(vector: Vector3D): Vector3D {
+    return Vector3D.fromArray(
+      this._matrix.multiplyVector(vector).toArray() as [number, number, number],
     );
   }
 }
