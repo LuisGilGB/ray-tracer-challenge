@@ -35,6 +35,10 @@ class Vector3D extends Vector {
     return Vector3D.fromVector(this);
   }
 
+  toArray(): [number, number, number] {
+    return super.toArray() as [number, number, number];
+  }
+
   toObject(): {x: number; y: number; z: number} {
     return {x: this.x, y: this.y, z: this.z};
   }

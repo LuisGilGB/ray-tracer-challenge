@@ -5,7 +5,7 @@ import Tuple from '../../src/Tuple';
 import Tuple3D from '../../src/Tuple3D';
 import Vector3D from '../../src/Vector3D';
 
-describe('Translation tests', () => {
+describe('Translation for 3D tests', () => {
   it('should return a Matrix with the correct values', () => {
     const expected = Matrix.fromArray([
       [1, 0, 0, 1],
