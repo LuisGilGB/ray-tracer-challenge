@@ -1,1 +1,1 @@
-export {default as Translation} from './Translation';
+export {default as Translation} from './Translation3D';
