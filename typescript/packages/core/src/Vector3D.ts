@@ -23,6 +23,10 @@ class Vector3D extends Vector {
     return new Vector3D(...arr);
   }
 
+  static fromTuple(tuple: Tuple3D): Vector3D {
+    return new Vector3D(tuple.at(0), tuple.at(1), tuple.at(2));
+  }
+
   static fromVector(vector: Vector): Vector3D {
     return new Vector3D(vector.at(0), vector.at(1), vector.at(2));
   }

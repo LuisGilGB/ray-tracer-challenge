@@ -1,12 +1,15 @@
 import {Point} from 'core';
 
+const DEFAULT_CENTER = new Point(0, 0, 0);
+const DEFAULT_RADIUS = 1;
+
 class Sphere {
   private readonly _center: Point;
   private readonly _radius: number;
 
-  constructor(center: Point, radius: number) {
-    this._center = center;
-    this._radius = radius;
+  constructor(center?: Point, radius?: number) {
+    this._center = center || DEFAULT_CENTER;
+    this._radius = radius || DEFAULT_RADIUS;
     Object.freeze(this);
   }
 
@@ -16,6 +19,10 @@ class Sphere {
 
   get radius(): number {
     return this._radius;
+  }
+
+  static unitSphere(): Sphere {
+    return new Sphere(DEFAULT_CENTER, DEFAULT_RADIUS);
   }
 }
 
