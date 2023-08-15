@@ -3,8 +3,9 @@ import Point from '../Point';
 import Tuple from '../Tuple';
 import Tuple3D from '../Tuple3D';
 import Vector3D from '../Vector3D';
+import {Transform3D} from './Transform3DPipeline';
 
-class Translation3D {
+class Translation3D implements Transform3D {
   private readonly _matrix: Matrix;
 
   constructor(tuple: Tuple3D) {
@@ -44,8 +45,16 @@ class Translation3D {
     );
   }
 
+  public transformPoint(point: Point): Point {
+    return this.translatePoint(point);
+  }
+
   public translateVector(vector: Vector3D): Vector3D {
     return vector;
+  }
+
+  public transformVector(vector: Vector3D): Vector3D {
+    return this.translateVector(vector);
   }
 }
 

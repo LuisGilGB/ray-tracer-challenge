@@ -3,8 +3,9 @@ import Point from '../Point';
 import Tuple from '../Tuple';
 import Vector from '../Vector';
 import Vector3D from '../Vector3D';
+import {Transform3D} from './Transform3DPipeline';
 
-class Rotation3D {
+class Rotation3D implements Transform3D {
   private readonly _matrix: Matrix;
 
   private constructor(matrix: Matrix) {
@@ -68,12 +69,20 @@ class Rotation3D {
     );
   }
 
+  transformPoint(point: Point): Point {
+    return this.rotatePoint(point);
+  }
+
   rotateVector(vector: Vector3D): Vector3D {
     return Vector3D.fromArray(
       this._matrix
         .multiplyVector(Vector.fromArray([...vector.toArray(), 0]))
         .toArray() as [number, number, number],
     );
+  }
+
+  transformVector(vector: Vector3D): Vector3D {
+    return this.rotateVector(vector);
   }
 }
 

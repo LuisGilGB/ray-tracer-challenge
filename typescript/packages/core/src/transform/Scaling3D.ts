@@ -4,8 +4,9 @@ import Tuple from '../Tuple';
 import Tuple3D from '../Tuple3D';
 import Vector from '../Vector';
 import Vector3D from '../Vector3D';
+import {Transform3D} from './Transform3DPipeline';
 
-class Scaling3D {
+class Scaling3D implements Transform3D {
   private readonly _matrix: Matrix;
 
   constructor(tuple: Tuple3D) {
@@ -45,12 +46,20 @@ class Scaling3D {
     );
   }
 
+  public transformPoint(point: Point): Point {
+    return this.scalePoint(point);
+  }
+
   public scaleVector(vector: Vector3D): Vector3D {
     return Vector3D.fromArray(
       this._matrix
         .multiplyVector(Vector.fromArray([...vector.toArray(), 0]))
         .toArray() as [number, number, number],
     );
+  }
+
+  public transformVector(vector: Vector3D): Vector3D {
+    return this.scaleVector(vector);
   }
 }
 
