@@ -36,6 +36,10 @@ class Tuple3D extends Tuple {
     return this.values.every((value, i) => value === tuple.values[i]);
   }
 
+  map(fn: (value: number, index: number) => number): Tuple3D {
+    return Tuple3D.fromTuple(super.map(fn));
+  }
+
   add(tuple: Tuple3D): Tuple3D {
     return Tuple3D.fromTuple(super.add(tuple));
   }

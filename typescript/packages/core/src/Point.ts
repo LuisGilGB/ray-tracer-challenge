@@ -65,6 +65,10 @@ class Point {
     return this.tuple.equals(point.tuple);
   }
 
+  map(f: (n: number) => number): Point {
+    return Point.fromTuple(this.tuple.map(f));
+  }
+
   addVector(vector: Vector3D): Point {
     return Point.fromTuple(this.tuple.add(vector.toTuple()));
   }
