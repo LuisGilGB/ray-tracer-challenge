@@ -35,8 +35,9 @@ class Intersection {
       const t = -b / (2 * a);
       return [new Intersection(t, sphere)];
     }
-    const t1 = (-b - Math.sqrt(discriminant)) / (2 * a);
-    const t2 = (-b + Math.sqrt(discriminant)) / (2 * a);
+    const sqrtDiscriminant = Math.sqrt(discriminant);
+    const t1 = (-b - sqrtDiscriminant) / (2 * a);
+    const t2 = (-b + sqrtDiscriminant) / (2 * a);
     return [new Intersection(t1, sphere), new Intersection(t2, sphere)];
   }
 }

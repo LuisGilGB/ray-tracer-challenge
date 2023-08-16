@@ -1,4 +1,11 @@
-import {Point, Vector3D} from 'core';
+import {
+  Point,
+  Rotation3D,
+  Scaling3D,
+  Transform3D,
+  Translation3D,
+  Vector3D,
+} from 'core';
 
 class Ray {
   private readonly _origin: Point;
@@ -20,6 +27,25 @@ class Ray {
 
   position(time: number): Point {
     return this.origin.addVector(this.direction.multiply(time));
+  }
+
+  transform(transform: Transform3D): Ray {
+    return new Ray(
+      transform.transformPoint(this.origin),
+      transform.transformVector(this.direction),
+    );
+  }
+
+  translate(translation: Translation3D): Ray {
+    return this.transform(translation);
+  }
+
+  scale(scaling: Scaling3D): Ray {
+    return this.transform(scaling);
+  }
+
+  rotate(rotation: Rotation3D): Ray {
+    return this.transform(rotation);
   }
 }
 
