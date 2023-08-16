@@ -11,7 +11,9 @@ describe('Intersection tests', () => {
       const intersections = Intersection.raySphere(ray, sphere);
       expect(intersections.length).toBe(2);
       expect(intersections[0].t).toBe(4);
+      expect(intersections[0].object).toBe(sphere);
       expect(intersections[1].t).toBe(6);
+      expect(intersections[1].object).toBe(sphere);
     });
 
     it('should return one intersection when the ray intersects the sphere only as a tangent', () => {
@@ -20,6 +22,7 @@ describe('Intersection tests', () => {
       const intersections = Intersection.raySphere(ray, sphere);
       expect(intersections.length).toBe(1);
       expect(intersections[0].t).toBe(5);
+      expect(intersections[0].object).toBe(sphere);
     });
 
     it('should return no intersections when the ray misses to intersect the sphere', () => {
@@ -35,7 +38,9 @@ describe('Intersection tests', () => {
       const intersections = Intersection.raySphere(ray, sphere);
       expect(intersections.length).toBe(2);
       expect(intersections[0].t).toBe(-1);
+      expect(intersections[0].object).toBe(sphere);
       expect(intersections[1].t).toBe(1);
+      expect(intersections[1].object).toBe(sphere);
     });
 
     it('should return two intersections when the sphere is behind the ray', () => {
@@ -44,7 +49,9 @@ describe('Intersection tests', () => {
       const intersections = Intersection.raySphere(ray, sphere);
       expect(intersections.length).toBe(2);
       expect(intersections[0].t).toBe(-6);
+      expect(intersections[0].object).toBe(sphere);
       expect(intersections[1].t).toBe(-4);
+      expect(intersections[1].object).toBe(sphere);
     });
   });
 });

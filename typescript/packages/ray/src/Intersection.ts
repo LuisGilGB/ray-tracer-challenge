@@ -1,14 +1,14 @@
-import {Point, Vector3D} from 'core';
+import {Vector3D} from 'core';
 import {Sphere} from 'shapes';
 import Ray from './Ray';
 
 class Intersection {
   private readonly _t: number;
-  private readonly _point: Point;
+  private readonly _object: unknown;
 
-  constructor(t: number, point: Point) {
+  constructor(t: number, object: unknown) {
     this._t = t;
-    this._point = point;
+    this._object = object;
     Object.freeze(this);
   }
 
@@ -16,8 +16,8 @@ class Intersection {
     return this._t;
   }
 
-  get point(): Point {
-    return this._point;
+  get object(): unknown {
+    return this._object;
   }
 
   public static raySphere(ray: Ray, sphere: Sphere): Intersection[] {
@@ -33,14 +33,11 @@ class Intersection {
     }
     if (discriminant === 0) {
       const t = -b / (2 * a);
-      return [new Intersection(t, ray.position(t))];
+      return [new Intersection(t, sphere)];
     }
     const t1 = (-b - Math.sqrt(discriminant)) / (2 * a);
     const t2 = (-b + Math.sqrt(discriminant)) / (2 * a);
-    return [
-      new Intersection(t1, ray.position(t1)),
-      new Intersection(t2, ray.position(t2)),
-    ];
+    return [new Intersection(t1, sphere), new Intersection(t2, sphere)];
   }
 }
 
