@@ -1,41 +1,43 @@
-import {Canvas, Color, Point, Vector3D} from 'core';
+import {Canvas, Color, Point, Translation3D, Tuple3D} from 'core';
 import * as fs from 'fs';
-import {Hit, Intersection, Ray} from 'ray';
+import {Hit, Intersection} from 'ray';
 import {Sphere} from 'shapes';
+import {getRaysToCanvas} from './utils';
 
 const main = () => {
-  const size = 40;
+  const size = 400;
   const canvas = new Canvas(size, size);
+  const halfSize = Math.floor(size / 2);
+
+  const centerTranslation = new Translation3D(
+    new Tuple3D(halfSize, halfSize, 0),
+  );
 
   const horizonDistance = 100;
-  const sphereDistance = horizonDistance * 0.75;
+  const sphereDistance = horizonDistance * 0.4;
   const sphereRadius = 10;
 
-  const rays = Array(size ** 2)
-    .fill(0)
-    .map((_, i) => {
-      const origin = new Point(0, 0, 0);
-      const direction = new Vector3D(
-        i % size,
-        Math.floor(i / size),
-        horizonDistance,
-      );
+  const rays = getRaysToCanvas(canvas, horizonDistance);
 
-      return new Ray(origin, direction);
-    });
-
-  const sphere = new Sphere(new Point(0, 0, sphereDistance), sphereRadius);
+  const sphere = new Sphere(
+    centerTranslation.transformPoint(new Point(0, 0, sphereDistance)),
+    sphereRadius,
+  );
 
   rays.forEach(ray => {
     const intersections = Intersection.raySphere(ray, sphere);
     const hit = Hit.fromIntersections(intersections);
 
     if (hit) {
-      const pixel = {x: ray.direction.x, y: ray.direction.y};
+      const pixel = {
+        x: ray.direction.x + halfSize,
+        y: ray.direction.y + halfSize,
+      };
       canvas.writePixel(pixel.x, pixel.y, new Color(1, 0, 0));
     }
   });
 
+  console.log('Writing file...');
   fs.writeFileSync('output.ppm', canvas.toPPM());
   console.log('Done');
 };
