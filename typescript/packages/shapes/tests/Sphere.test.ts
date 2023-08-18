@@ -1,4 +1,4 @@
-import {Point} from 'core';
+import {Point, Vector3D} from 'core';
 import Sphere from '../src/Sphere';
 
 describe('Sphere tests', () => {
@@ -28,6 +28,46 @@ describe('Sphere tests', () => {
       const sphere = Sphere.unitSphere();
       expect(sphere.center).toEqual(new Point(0, 0, 0));
       expect(sphere.radius).toBe(1);
+    });
+  });
+
+  describe('Normal vector computation', () => {
+    it('should return the normal vector of the sphere on the X axis', () => {
+      const sphere = Sphere.unitSphere();
+      const normal = sphere.normal(new Point(1, 0, 0));
+      expect(normal).toEqual(new Vector3D(1, 0, 0));
+    });
+
+    it('should return the normal vector of the sphere on the Y axis', () => {
+      const sphere = Sphere.unitSphere();
+      const normal = sphere.normal(new Point(0, 1, 0));
+      expect(normal).toEqual(new Vector3D(0, 1, 0));
+    });
+
+    it('should return the normal vector of the sphere on the Z axis', () => {
+      const sphere = Sphere.unitSphere();
+      const normal = sphere.normal(new Point(0, 0, 1));
+      expect(normal).toEqual(new Vector3D(0, 0, 1));
+    });
+
+    it('should return the normal vector of the sphere at a non axial point', () => {
+      const sphere = Sphere.unitSphere();
+      const componentSize = Math.sqrt(3) / 3;
+      const normal = sphere.normal(
+        new Point(componentSize, componentSize, componentSize),
+      );
+      expect(normal).toEqual(
+        new Vector3D(componentSize, componentSize, componentSize),
+      );
+    });
+
+    it('should return a normalized vector', () => {
+      const sphere = Sphere.unitSphere();
+      const componentSize = Math.sqrt(3) / 3;
+      const normal = sphere.normal(
+        new Point(componentSize, componentSize, componentSize),
+      );
+      expect(normal).toEqual(normal.normalize());
     });
   });
 });

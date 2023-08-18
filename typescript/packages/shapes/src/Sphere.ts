@@ -1,4 +1,4 @@
-import {Point} from 'core';
+import {Point, Vector3D} from 'core';
 
 const DEFAULT_CENTER = new Point(0, 0, 0);
 const DEFAULT_RADIUS = 1;
@@ -23,6 +23,12 @@ class Sphere {
 
   static unitSphere(): Sphere {
     return new Sphere(DEFAULT_CENTER, DEFAULT_RADIUS);
+  }
+
+  normal(point: Point): Vector3D {
+    return Vector3D.fromTuple(
+      point.toTuple().subtract(this._center.toTuple()),
+    ).normalize();
   }
 }
 
