@@ -30,6 +30,10 @@ class Sphere {
       point.toTuple().subtract(this._center.toTuple()),
     ).normalize();
   }
+
+  reflectWithNormal(vector: Vector3D, normal: Vector3D): Vector3D {
+    return vector.subtract(normal.multiply(2 * vector.dot(normal)));
+  }
 }
 
 export default Sphere;

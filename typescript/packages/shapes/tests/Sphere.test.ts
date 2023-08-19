@@ -70,4 +70,26 @@ describe('Sphere tests', () => {
       expect(normal).toEqual(normal.normalize());
     });
   });
+
+  describe('Reflection of a vector computation', () => {
+    it('should return the reflection of a vector approaching the sphere at 45º', () => {
+      const sphere = Sphere.unitSphere();
+      const vector = new Vector3D(1, -1, 0);
+      const normal = sphere.normal(new Point(0, 1, 0));
+      const reflection = sphere.reflectWithNormal(vector, normal);
+      expect(reflection).toEqual(new Vector3D(1, 1, 0));
+    });
+
+    it('should return the reflection of a vector off a slanted surface', () => {
+      const sphere = Sphere.unitSphere();
+      const componentSize = Math.sqrt(2) / 2;
+      const vector = new Vector3D(0, -1, 0);
+      const normal = sphere.normal(new Point(componentSize, componentSize, 0));
+      const reflection = sphere.reflectWithNormal(vector, normal);
+      const expected = new Vector3D(1, 0, 0);
+      reflection.toArray().forEach((component, i) => {
+        expect(component).toBeCloseTo(expected.toArray()[i]);
+      });
+    });
+  });
 });
