@@ -1,4 +1,4 @@
-import {Point, Vector3D} from 'core';
+import {Point, Transform3D, Tuple, Tuple3D, Vector3D} from 'core';
 
 const DEFAULT_CENTER = new Point(0, 0, 0);
 const DEFAULT_RADIUS = 1;
@@ -33,6 +33,21 @@ class Sphere {
 
   reflectWithNormal(vector: Vector3D, normal: Vector3D): Vector3D {
     return vector.subtract(normal.multiply(2 * vector.dot(normal)));
+  }
+
+  normalOfTransformed(point: Point, transform: Transform3D): Vector3D {
+    const relativePoint = Point.fromTuple(
+      transform.matrix
+        .getInverse()
+        .multiplyTuple(Tuple.fromArray([...point.toArray(), 1])) as Tuple3D,
+    );
+    const relativeNormal = this.normal(relativePoint);
+    const normal = transform.matrix
+      .getSubmatrix(3, 3)
+      .getInverse()
+      .getTranspose()
+      .multiplyVector(relativeNormal) as Vector3D;
+    return normal.normalize();
   }
 }
 

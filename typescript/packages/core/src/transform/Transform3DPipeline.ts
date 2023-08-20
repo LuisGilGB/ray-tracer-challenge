@@ -1,7 +1,10 @@
+import Matrix from '../Matrix';
 import Point from '../Point';
 import Vector3D from '../Vector3D';
 
 export interface Transform3D {
+  matrix: Matrix;
+
   transformPoint(point: Point): Point;
 
   transformVector(vector: Vector3D): Vector3D;
@@ -10,8 +13,15 @@ export interface Transform3D {
 class Transform3DPipeline {
   private transformations: Transform3D[];
 
-  constructor() {
+  private constructor() {
     this.transformations = [];
+  }
+
+  public get matrix(): Matrix {
+    return this.transformations.reduce(
+      (acc, transformation) => acc.multiply(transformation.matrix),
+      Matrix.identity(4),
+    );
   }
 
   public static init(): Transform3DPipeline {

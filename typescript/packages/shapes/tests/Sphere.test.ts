@@ -1,4 +1,11 @@
-import {Point, Vector3D} from 'core';
+import {
+  Point,
+  Rotation3D,
+  Scaling3D,
+  Transform3DPipeline,
+  Translation3D,
+  Vector3D,
+} from 'core';
 import Sphere from '../src/Sphere';
 
 describe('Sphere tests', () => {
@@ -68,6 +75,35 @@ describe('Sphere tests', () => {
         new Point(componentSize, componentSize, componentSize),
       );
       expect(normal).toEqual(normal.normalize());
+    });
+
+    it('should compute the normal on a translated sphere', () => {
+      const normal = Sphere.unitSphere().normalOfTransformed(
+        new Point(0, 1 + Math.sin(Math.PI / 4), -Math.cos(Math.PI / 4)),
+        Translation3D.translation(0, 1, 0),
+      );
+      const expected = new Vector3D(
+        0,
+        Math.sin(Math.PI / 4),
+        -Math.cos(Math.PI / 4),
+      );
+      normal.toArray().forEach((component, i) => {
+        expect(component).toBeCloseTo(expected.toArray()[i]);
+      });
+    });
+
+    it('should compute the normal on a transformed sphere', () => {
+      const normal = Sphere.unitSphere().normalOfTransformed(
+        new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2),
+        Transform3DPipeline.init().pipe(
+          Scaling3D.scaling(1, 0.5, 1),
+          Rotation3D.rotationZ(Math.PI / 5),
+        ),
+      );
+      const expected = new Vector3D(0, 0.97014, -0.24254);
+      normal.toArray().forEach((component, i) => {
+        expect(component).toBeCloseTo(expected.toArray()[i]);
+      });
     });
   });
 

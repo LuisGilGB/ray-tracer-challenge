@@ -2,8 +2,9 @@ import Matrix from '../Matrix';
 import Point from '../Point';
 import Tuple from '../Tuple';
 import Vector3D from '../Vector3D';
+import {Transform3D} from './Transform3DPipeline';
 
-class Shearing3D {
+class Shearing3D implements Transform3D {
   private readonly _matrix: Matrix;
 
   constructor(
@@ -50,7 +51,7 @@ class Shearing3D {
     );
   }
 
-  shearPoint(point: Point) {
+  public shearPoint(point: Point) {
     return Point.fromArray(
       this._matrix
         .multiplyTuple(Tuple.fromArray([...point.toArray(), 1]))
@@ -58,10 +59,18 @@ class Shearing3D {
     );
   }
 
-  shearVector(vector: Vector3D): Vector3D {
+  public transformPoint(point: Point): Point {
+    return this.shearPoint(point);
+  }
+
+  public shearVector(vector: Vector3D): Vector3D {
     return Vector3D.fromArray(
       this._matrix.multiplyVector(vector).toArray() as [number, number, number],
     );
+  }
+
+  public transformVector(vector: Vector3D): Vector3D {
+    return this.shearVector(vector);
   }
 }
 
