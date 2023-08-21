@@ -7,6 +7,7 @@ class PointLight {
   constructor(position: Point, intensity: Color) {
     this._position = position;
     this._intensity = intensity;
+    Object.freeze(this);
   }
 
   get position(): Point {
