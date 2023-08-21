@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "core": "workspace:*",
+    "light": "workspace:*",
+    "material": "workspace:*",
     "shapes": "workspace:*"
   },
   "devDependencies": {

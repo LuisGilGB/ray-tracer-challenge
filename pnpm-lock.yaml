@@ -251,6 +251,12 @@ importers:
       core:
         specifier: workspace:*
         version: link:../core
+      light:
+        specifier: workspace:*
+        version: link:../light
+      material:
+        specifier: workspace:*
+        version: link:../material
       shapes:
         specifier: workspace:*
         version: link:../shapes
@@ -288,6 +294,9 @@ importers:
       core:
         specifier: workspace:*
         version: link:../core
+      material:
+        specifier: workspace:*
+        version: link:../material
     devDependencies:
       '@swc/core':
         specifier: ^1.3.76

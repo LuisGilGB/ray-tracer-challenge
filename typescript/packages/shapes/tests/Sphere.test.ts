@@ -6,6 +6,7 @@ import {
   Translation3D,
   Vector3D,
 } from 'core';
+import {PhongMaterial} from 'material';
 import Sphere from '../src/Sphere';
 
 describe('Sphere tests', () => {
@@ -16,6 +17,19 @@ describe('Sphere tests', () => {
       const sphere = new Sphere(center, radius);
       expect(sphere.center).toBe(center);
       expect(sphere.radius).toBe(radius);
+    });
+
+    it('should create a sphere with a given material', () => {
+      const material = new PhongMaterial({
+        ambient: 0.1,
+        diffuse: 0.2,
+        specular: 0.3,
+        shininess: 40,
+      });
+      const center = new Point(1, 2, 3);
+      const radius = 4;
+      const sphere = new Sphere(center, radius, material);
+      expect(sphere.material).toBe(material);
     });
 
     it('should create a unit sphere centered in the origin when no parameters are provided', () => {
@@ -35,6 +49,18 @@ describe('Sphere tests', () => {
       const sphere = Sphere.unitSphere();
       expect(sphere.center).toEqual(new Point(0, 0, 0));
       expect(sphere.radius).toBe(1);
+    });
+
+    it('should create a sphere with a given material when cloning but passing a new material', () => {
+      const material = new PhongMaterial({
+        ambient: 0.1,
+        diffuse: 0.2,
+        specular: 0.3,
+        shininess: 40,
+      });
+      const sphere = Sphere.unitSphere();
+      const newSphere = sphere.cloneWith({material});
+      expect(newSphere.material).toBe(material);
     });
   });
 
