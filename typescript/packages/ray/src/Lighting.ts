@@ -3,6 +3,12 @@ import {PointLight} from 'light';
 import {PhongMaterial} from 'material';
 
 class Lighting {
+  static reflect(inVector: Vector3D, normalVector: Vector3D): Vector3D {
+    return inVector.subtract(
+      normalVector.multiply(2 * inVector.dot(normalVector)),
+    );
+  }
+
   static lighting({
     material,
     light,
@@ -17,11 +23,7 @@ class Lighting {
     normalVector: Vector3D;
   }): Color {
     // Combine the surface color with the light's color/intensity
-    const effectiveColor = Color.fromTuple(
-      Vector3D.fromTuple(material.color.asTuple())
-        .cross(Vector3D.fromTuple(light.intensity.asTuple()))
-        .toTuple(),
-    );
+    const effectiveColor = material.color.hadamardProduct(light.intensity);
 
     // Find the direction to the light source
     const lightVector = Vector3D.fromTuple(
@@ -39,15 +41,29 @@ class Lighting {
     const black = new Color(0, 0, 0);
     let diffuse = black;
     let specular = black;
-    if (lightDotNormal >= 0) {
+
+    if (lightDotNormal < 0) {
+      // light is on the other side of the surface
+      diffuse = black;
+      specular = black;
+    } else {
+      // compute the diffuse contribution
       diffuse = effectiveColor
         .multiply(material.diffuse)
         .multiply(lightDotNormal);
-      const reflectVector = lightVector.subtract(
-        normalVector.multiply(2 * lightVector.dot(normalVector)),
+      // reflectDotEye represents the cosine of the angle between the
+      // reflection vector and the eye vector. A negative number means the
+      // light reflects away from the eye.
+      const reflectVector = Lighting.reflect(
+        lightVector.negate(),
+        normalVector,
       );
       const reflectDotEye = reflectVector.dot(eyeVector);
-      if (reflectDotEye > 0) {
+
+      if (reflectDotEye <= 0) {
+        specular = black;
+      } else {
+        // compute the specular contribution
         const factor = Math.pow(reflectDotEye, material.shininess);
         specular = light.intensity.multiply(material.specular).multiply(factor);
       }

@@ -49,7 +49,10 @@ describe('Lighting tests', () => {
         eyeVector,
         normalVector,
       });
-      expect(result).toEqual(new Color(0.7364, 0.7364, 0.7364));
+      const expected = new Color(0.7364, 0.7364, 0.7364);
+      result.keys().forEach(key => {
+        expect(result[key]).toBeCloseTo(expected[key]);
+      });
     });
 
     it('Lighting with eye in the path of the reflection vector', () => {
@@ -64,7 +67,10 @@ describe('Lighting tests', () => {
         eyeVector,
         normalVector,
       });
-      expect(result).toEqual(new Color(1.6364, 1.6364, 1.6364));
+      const expected = new Color(1.6364, 1.6364, 1.6364);
+      result.keys().forEach(key => {
+        expect(result[key]).toBeCloseTo(expected[key]);
+      });
     });
 
     it('Lighting with the light behind the surface', () => {

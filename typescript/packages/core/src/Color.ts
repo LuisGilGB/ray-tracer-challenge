@@ -44,12 +44,20 @@ class Color {
     return new Color(this.red, this.green, this.blue);
   }
 
-  asTuple(): Tuple3D {
+  toArray(): [number, number, number] {
+    return this.tuple.toArray();
+  }
+
+  toTuple(): Tuple3D {
     return this.tuple.clone();
   }
 
   equals(color: Color): boolean {
     return this.tuple.equals(color.tuple);
+  }
+
+  keys(): ['red', 'green', 'blue'] {
+    return ['red', 'green', 'blue'];
   }
 
   add(color: Color): Color {
