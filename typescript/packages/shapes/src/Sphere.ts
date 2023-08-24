@@ -1,4 +1,11 @@
-import {Point, Transform3D, Tuple, Tuple3D, Vector3D} from 'core';
+import {
+  Point,
+  Transform3D,
+  Tuple,
+  Tuple3D,
+  Vector3D,
+  Vector3DFactory,
+} from 'core';
 import {PhongMaterial} from 'material';
 
 const DEFAULT_CENTER = new Point(0, 0, 0);
@@ -57,9 +64,7 @@ class Sphere {
   }
 
   normal(point: Point): Vector3D {
-    return Vector3D.fromTuple(
-      point.toTuple().subtract(this._center.toTuple()),
-    ).normalize();
+    return Vector3DFactory.fromPoints(this._center, point).normalize();
   }
 
   reflectWithNormal(vector: Vector3D, normal: Vector3D): Vector3D {

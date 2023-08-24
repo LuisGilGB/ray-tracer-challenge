@@ -1,4 +1,4 @@
-import {Color, Point, Vector3D} from 'core';
+import {Color, Point, Vector3D, Vector3DFactory} from 'core';
 import {PointLight} from 'light';
 import {PhongMaterial} from 'material';
 
@@ -26,8 +26,9 @@ class Lighting {
     const effectiveColor = material.color.hadamardProduct(light.intensity);
 
     // Find the direction to the light source
-    const lightVector = Vector3D.fromTuple(
-      light.position.toTuple().subtract(position.toTuple()),
+    const lightVector = Vector3DFactory.fromPoints(
+      position,
+      light.position,
     ).normalize();
 
     // compute the ambient contribution

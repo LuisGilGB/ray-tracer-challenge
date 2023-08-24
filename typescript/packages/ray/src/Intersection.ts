@@ -1,4 +1,4 @@
-import {Vector3D} from 'core';
+import {Vector3DFactory} from 'core';
 import {Sphere} from 'shapes';
 import Ray from './Ray';
 
@@ -21,12 +21,14 @@ class Intersection {
   }
 
   public static raySphere(ray: Ray, sphere: Sphere): Intersection[] {
-    const sphereToRay = Vector3D.fromTuple(
-      ray.origin.toTuple().subtract(sphere.center.toTuple()),
+    const sphereCenterToRay = Vector3DFactory.fromPoints(
+      sphere.center,
+      ray.origin,
     );
     const a = ray.direction.dot(ray.direction);
-    const b = 2 * ray.direction.dot(sphereToRay);
-    const c = sphereToRay.dot(sphereToRay) - sphere.radius * sphere.radius;
+    const b = 2 * ray.direction.dot(sphereCenterToRay);
+    const c =
+      sphereCenterToRay.dot(sphereCenterToRay) - sphere.radius * sphere.radius;
     const discriminant = b * b - 4 * a * c;
     if (discriminant < 0) {
       return [];

@@ -1,3 +1,4 @@
+export * from './factories';
 export * from './transform';
 
 export {default as Canvas} from './Canvas';
