@@ -385,6 +385,9 @@ importers:
       material:
         specifier: workspace:*
         version: link:../material
+      ray:
+        specifier: workspace:*
+        version: link:../ray
       shapes:
         specifier: workspace:*
         version: link:../shapes

@@ -13,6 +13,7 @@
     "core": "workspace:*",
     "light": "workspace:*",
     "material": "workspace:*",
+    "ray": "workspace:*",
     "shapes": "workspace:*"
   },
   "devDependencies": {

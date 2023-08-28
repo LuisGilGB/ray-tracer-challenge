@@ -1,6 +1,7 @@
-import {Color, Point} from 'core';
+import {Color, Point, Vector3D} from 'core';
 import {PointLight} from 'light';
 import {PhongMaterial} from 'material';
+import {Ray} from 'ray';
 import {Sphere} from 'shapes';
 import World from '../src/World';
 
@@ -20,5 +21,18 @@ describe('World tests', () => {
 
     expect(world.light).toBe(light);
     expect(world.objects).toEqual([sphere1, sphere2]);
+  });
+
+  it('Computes intersections of a ray in the world', () => {
+    const world = new World(light, [sphere1, sphere2]);
+    const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
+
+    const intersections = world.intersect(ray);
+
+    expect(intersections.length).toBe(4);
+    expect(intersections[0].t).toBe(4);
+    expect(intersections[1].t).toBe(4.5);
+    expect(intersections[2].t).toBe(5.5);
+    expect(intersections[3].t).toBe(6);
   });
 });

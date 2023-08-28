@@ -1,4 +1,5 @@
 import {PointLight} from 'light';
+import {Intersection, Ray} from 'ray';
 import {Sphere} from 'shapes';
 
 class World {
@@ -16,6 +17,16 @@ class World {
 
   public get objects(): Sphere[] {
     return this._objects;
+  }
+
+  public intersect(ray: Ray): Intersection[] {
+    const intersections: Intersection[] = this.objects.reduce<Intersection[]>(
+      (acc, sphere) => {
+        return acc.concat(Intersection.raySphere(ray, sphere));
+      },
+      [],
+    );
+    return intersections.sort((a, b) => a.t - b.t);
   }
 }
 
