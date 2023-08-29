@@ -40,7 +40,7 @@ class Translation3D extends Transform3D {
   }
 
   public transformVector(vector: Vector3D): Vector3D {
-    return this.translateVector(vector);
+    return vector;
   }
 }
 

@@ -29,12 +29,10 @@ class Transform3D implements ITransform3D {
   }
 
   public transformPoint(point: Point): Point {
-    return Point.fromArray(
-      this.matrix
-        .multiplyTuple(Tuple.fromArray([...point.toArray(), 1]))
-        .toArray()
-        .slice(3),
+    const multipliedPoint = this.matrix.multiplyTuple(
+      Tuple.fromArray([...point.toArray(), 1]),
     );
+    return Point.fromArray(multipliedPoint.toArray().slice(0, 3));
   }
 
   public transformVector(vector: Vector3D): Vector3D {
