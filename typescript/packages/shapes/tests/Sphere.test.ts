@@ -15,8 +15,8 @@ describe('Sphere tests', () => {
       const center = new Point(1, 2, 3);
       const radius = 4;
       const sphere = new Sphere(center, radius);
-      expect(sphere.center).toBe(center);
-      expect(sphere.radius).toBe(radius);
+      expect(sphere.center).toEqual(center);
+      expect(sphere.radius).toEqual(radius);
     });
 
     it('should create a sphere with a given material', () => {
@@ -41,8 +41,8 @@ describe('Sphere tests', () => {
     it('should create a sphere of radius 1 when only the center is provided', () => {
       const center = new Point(1, 2, 3);
       const sphere = new Sphere(center);
-      expect(sphere.center).toBe(center);
-      expect(sphere.radius).toBe(1);
+      expect(sphere.center).toEqual(center);
+      expect(sphere.radius).toEqual(1);
     });
 
     it('should create a unit sphere when calling the unitSphere static method', () => {
@@ -104,10 +104,11 @@ describe('Sphere tests', () => {
     });
 
     it('should compute the normal on a translated sphere', () => {
-      const normal = Sphere.unitSphere().normalOfTransformed(
-        new Point(0, 1 + Math.sin(Math.PI / 4), -Math.cos(Math.PI / 4)),
-        Translation3D.translation(0, 1, 0),
-      );
+      const normal = Sphere.unitSphere()
+        .transform(Translation3D.translation(0, 1, 0))
+        .normal(
+          new Point(0, 1 + Math.sin(Math.PI / 4), -Math.cos(Math.PI / 4)),
+        );
       const expected = new Vector3D(
         0,
         Math.sin(Math.PI / 4),
@@ -119,13 +120,16 @@ describe('Sphere tests', () => {
     });
 
     it('should compute the normal on a transformed sphere', () => {
-      const normal = Sphere.unitSphere().normalOfTransformed(
-        new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2),
-        Transform3DPipeline.init().pipe(
-          Scaling3D.scaling(1, 0.5, 1),
-          Rotation3D.rotationZ(Math.PI / 5),
-        ),
-      );
+      const normal = Sphere.unitSphere()
+        .transform(
+          Transform3DPipeline.init()
+            .pipe(
+              Scaling3D.scaling(1, 0.5, 1),
+              Rotation3D.rotationZ(Math.PI / 5),
+            )
+            .value(),
+        )
+        .normal(new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2));
       const expected = new Vector3D(0, 0.97014, -0.24254);
       normal.toArray().forEach((component, i) => {
         expect(component).toBeCloseTo(expected.toArray()[i]);

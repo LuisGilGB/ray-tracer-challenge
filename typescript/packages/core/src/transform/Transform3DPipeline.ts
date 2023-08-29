@@ -37,6 +37,10 @@ class Transform3DPipeline {
     return this;
   }
 
+  public value(): Transform3D {
+    return Transform3D.fromMatrix(this.matrix);
+  }
+
   public transformPoint(point: Point): Point {
     return this.transformations.reduce(
       (acc, transformation) => transformation.transformPoint(acc),

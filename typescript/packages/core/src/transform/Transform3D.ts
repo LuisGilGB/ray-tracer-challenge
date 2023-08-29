@@ -28,6 +28,10 @@ class Transform3D implements ITransform3D {
     return new Transform3D(matrix);
   }
 
+  public equals(other: Transform3D): boolean {
+    return this.matrix.equals(other.matrix);
+  }
+
   public transformPoint(point: Point): Point {
     const multipliedPoint = this.matrix.multiplyTuple(
       Tuple.fromArray([...point.toArray(), 1]),
