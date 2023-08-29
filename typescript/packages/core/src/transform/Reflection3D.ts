@@ -3,8 +3,9 @@ import Point from '../Point';
 import Tuple3D from '../Tuple3D';
 import Vector3D from '../Vector3D';
 import Scaling3D from './Scaling3D';
+import {ITransform3D} from './Transform3D';
 
-class Reflection3D {
+class Reflection3D implements ITransform3D {
   private readonly _scaling: Scaling3D;
 
   private constructor(tuple: Tuple3D) {
@@ -37,8 +38,16 @@ class Reflection3D {
     return this._scaling.scalePoint(point);
   }
 
+  public transformPoint(point: Point): Point {
+    return this.reflectPoint(point);
+  }
+
   public reflectVector(vector: Vector3D): Vector3D {
     return this._scaling.scaleVector(vector);
+  }
+
+  public transformVector(vector: Vector3D): Vector3D {
+    return this.reflectVector(vector);
   }
 }
 

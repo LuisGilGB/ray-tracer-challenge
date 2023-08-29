@@ -1,17 +1,10 @@
 import Matrix from '../Matrix';
 import Point from '../Point';
 import Vector3D from '../Vector3D';
-
-export interface Transform3D {
-  matrix: Matrix;
-
-  transformPoint(point: Point): Point;
-
-  transformVector(vector: Vector3D): Vector3D;
-}
+import {ITransform3D} from './Transform3D';
 
 class Transform3DPipeline {
-  private transformations: Transform3D[];
+  private transformations: ITransform3D[];
 
   private constructor() {
     this.transformations = [];
@@ -24,16 +17,20 @@ class Transform3DPipeline {
     );
   }
 
+  public static unit(): Transform3DPipeline {
+    return new Transform3DPipeline();
+  }
+
   public static init(): Transform3DPipeline {
     return new Transform3DPipeline();
   }
 
-  public andThen(transformation: Transform3D): Transform3DPipeline {
+  public andThen(transformation: ITransform3D): Transform3DPipeline {
     this.transformations.push(transformation);
     return this;
   }
 
-  public pipe(...transformations: Transform3D[]): Transform3DPipeline {
+  public pipe(...transformations: ITransform3D[]): Transform3DPipeline {
     this.transformations.push(...transformations);
     return this;
   }

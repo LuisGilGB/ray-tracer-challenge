@@ -1,13 +1,15 @@
 import Matrix from '../Matrix';
 import Point from '../Point';
-import Tuple from '../Tuple';
 import Vector3D from '../Vector3D';
-import {Transform3D} from './Transform3DPipeline';
+import Transform3D from './Transform3D';
 
-class Shearing3D implements Transform3D {
-  private readonly _matrix: Matrix;
+class Shearing3D extends Transform3D {
+  private constructor(matrix: Matrix) {
+    super(matrix);
+    Object.freeze(this);
+  }
 
-  constructor(
+  public static fromComponents(
     xy: number,
     xz: number,
     yx: number,
@@ -15,18 +17,13 @@ class Shearing3D implements Transform3D {
     zx: number,
     zy: number,
   ) {
-    this._matrix = Matrix.fromArray([
+    const matrix = Matrix.fromArray([
       [1, xy, xz, 0],
       [yx, 1, yz, 0],
       [zx, zy, 1, 0],
       [0, 0, 0, 1],
     ]);
-    Object.freeze(this);
-    Object.freeze(this._matrix);
-  }
-
-  public get matrix(): Matrix {
-    return this._matrix;
+    return new Shearing3D(matrix);
   }
 
   public static shearing(
@@ -37,11 +34,11 @@ class Shearing3D implements Transform3D {
     zx: number,
     zy: number,
   ): Shearing3D {
-    return new Shearing3D(xy, xz, yx, yz, zx, zy);
+    return Shearing3D.fromComponents(xy, xz, yx, yz, zx, zy);
   }
 
   public static fromMatrix(matrix: Matrix): Shearing3D {
-    return new Shearing3D(
+    return Shearing3D.fromComponents(
       matrix.at(0, 1),
       matrix.at(0, 2),
       matrix.at(1, 0),
@@ -52,25 +49,11 @@ class Shearing3D implements Transform3D {
   }
 
   public shearPoint(point: Point) {
-    return Point.fromArray(
-      this._matrix
-        .multiplyTuple(Tuple.fromArray([...point.toArray(), 1]))
-        .toArray(),
-    );
-  }
-
-  public transformPoint(point: Point): Point {
-    return this.shearPoint(point);
+    return this.transformPoint(point);
   }
 
   public shearVector(vector: Vector3D): Vector3D {
-    return Vector3D.fromArray(
-      this._matrix.multiplyVector(vector).toArray() as [number, number, number],
-    );
-  }
-
-  public transformVector(vector: Vector3D): Vector3D {
-    return this.shearVector(vector);
+    return this.transformVector(vector);
   }
 }
 

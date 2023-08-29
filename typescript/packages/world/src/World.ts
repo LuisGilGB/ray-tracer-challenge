@@ -1,3 +1,4 @@
+import {Transform3D} from 'core';
 import {PointLight} from 'light';
 import {Intersection, Ray} from 'ray';
 import {Sphere} from 'shapes';
@@ -5,6 +6,7 @@ import {Sphere} from 'shapes';
 class World {
   private readonly _light: PointLight;
   private readonly _objects: Sphere[];
+  private readonly _transformation: Transform3D;
 
   constructor(light: PointLight, objects: Sphere[]) {
     this._light = light;

@@ -1,26 +1,20 @@
 import Matrix from '../Matrix';
 import Point from '../Point';
-import Tuple from '../Tuple';
 import Tuple3D from '../Tuple3D';
 import Vector3D from '../Vector3D';
-import {Transform3D} from './Transform3DPipeline';
+import Transform3D from './Transform3D';
 
-class Translation3D implements Transform3D {
-  private readonly _matrix: Matrix;
-
+class Translation3D extends Transform3D {
   constructor(tuple: Tuple3D) {
-    this._matrix = Matrix.fromArray([
+    const matrix = Matrix.fromArray([
       [1, 0, 0, tuple.at(0)],
       [0, 1, 0, tuple.at(1)],
       [0, 0, 1, tuple.at(2)],
       [0, 0, 0, 1],
     ]);
+    Object.freeze(matrix);
+    super(matrix);
     Object.freeze(this);
-    Object.freeze(this._matrix);
-  }
-
-  public get matrix(): Matrix {
-    return this._matrix;
   }
 
   public static fromMatrix(matrix: Matrix): Translation3D {
@@ -38,19 +32,11 @@ class Translation3D implements Transform3D {
   }
 
   public translatePoint(point: Point): Point {
-    return Point.fromArray(
-      this._matrix
-        .multiplyTuple(Tuple.fromArray([...point.toArray(), 1]))
-        .toArray(),
-    );
-  }
-
-  public transformPoint(point: Point): Point {
-    return this.translatePoint(point);
+    return this.transformPoint(point);
   }
 
   public translateVector(vector: Vector3D): Vector3D {
-    return vector;
+    return this.transformVector(vector);
   }
 
   public transformVector(vector: Vector3D): Vector3D {

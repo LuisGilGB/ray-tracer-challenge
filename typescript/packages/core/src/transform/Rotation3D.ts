@@ -1,23 +1,9 @@
 import Matrix from '../Matrix';
 import Point from '../Point';
-import Tuple from '../Tuple';
-import Vector from '../Vector';
 import Vector3D from '../Vector3D';
-import {Transform3D} from './Transform3DPipeline';
+import Transform3D from './Transform3D';
 
-class Rotation3D implements Transform3D {
-  private readonly _matrix: Matrix;
-
-  private constructor(matrix: Matrix) {
-    this._matrix = matrix;
-    Object.freeze(this);
-    Object.freeze(this._matrix);
-  }
-
-  public get matrix(): Matrix {
-    return this._matrix;
-  }
-
+class Rotation3D extends Transform3D {
   static rotationX(angle: number): Rotation3D {
     const cos = Math.cos(angle);
     const sin = Math.sin(angle);
@@ -62,27 +48,11 @@ class Rotation3D implements Transform3D {
   }
 
   rotatePoint(point: Point): Point {
-    return Point.fromArray(
-      this._matrix
-        .multiplyTuple(Tuple.fromArray([...point.toArray(), 1]))
-        .toArray(),
-    );
-  }
-
-  transformPoint(point: Point): Point {
-    return this.rotatePoint(point);
+    return this.transformPoint(point);
   }
 
   rotateVector(vector: Vector3D): Vector3D {
-    return Vector3D.fromArray(
-      this._matrix
-        .multiplyVector(Vector.fromArray([...vector.toArray(), 0]))
-        .toArray() as [number, number, number],
-    );
-  }
-
-  transformVector(vector: Vector3D): Vector3D {
-    return this.rotateVector(vector);
+    return this.transformVector(vector);
   }
 }
 
