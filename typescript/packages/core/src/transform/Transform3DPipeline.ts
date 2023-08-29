@@ -1,7 +1,7 @@
 import Matrix from '../Matrix';
 import Point from '../Point';
 import Vector3D from '../Vector3D';
-import {ITransform3D} from './Transform3D';
+import Transform3D, {ITransform3D} from './Transform3D';
 
 class Transform3DPipeline {
   private transformations: ITransform3D[];
@@ -17,12 +17,14 @@ class Transform3DPipeline {
     );
   }
 
-  public static unit(): Transform3DPipeline {
+  public static init(): Transform3DPipeline {
     return new Transform3DPipeline();
   }
 
-  public static init(): Transform3DPipeline {
-    return new Transform3DPipeline();
+  public static identity(): Transform3DPipeline {
+    return Transform3DPipeline.init().andThen(
+      Transform3D.fromMatrix(Matrix.identity(4)),
+    );
   }
 
   public andThen(transformation: ITransform3D): Transform3DPipeline {

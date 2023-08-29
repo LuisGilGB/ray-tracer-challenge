@@ -6,6 +6,20 @@ import Translation3D from '../../src/transform/Translation3D';
 import Vector3D from '../../src/Vector3D';
 
 describe('3D transformations pipeline tests', () => {
+  describe('Identity tests', () => {
+    it('should create an identity that does not change the point', () => {
+      const point = new Point(27, -13, 18);
+      const pipeline = Transform3DPipeline.identity();
+      expect(pipeline.transformPoint(point)).toEqual(point);
+    });
+
+    it('should create an identity that does not change the vector', () => {
+      const vector = new Vector3D(-21, 9, -16);
+      const pipeline = Transform3DPipeline.identity();
+      expect(pipeline.transformVector(vector)).toEqual(vector);
+    });
+  });
+
   it('should apply transformations in sequence to a point', () => {
     const point = new Point(1, 0, 1);
     const pipeline = Transform3DPipeline.init()
