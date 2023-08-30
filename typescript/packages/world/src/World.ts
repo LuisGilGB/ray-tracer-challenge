@@ -1,12 +1,11 @@
-import {Transform3D} from 'core';
 import {PointLight} from 'light';
 import {Intersection, Ray} from 'ray';
 import {Sphere} from 'shapes';
+import WorldHit from './WorldHit';
 
 class World {
   private readonly _light: PointLight;
   private readonly _objects: Sphere[];
-  private readonly _transformation: Transform3D;
 
   constructor(light: PointLight, objects: Sphere[]) {
     this._light = light;
@@ -29,6 +28,10 @@ class World {
       [],
     );
     return intersections.sort((a, b) => a.t - b.t);
+  }
+
+  public prepareHit(ray: Ray, intersection: Intersection): WorldHit {
+    return WorldHit.fromRayAndIntersection(ray, intersection);
   }
 }
 

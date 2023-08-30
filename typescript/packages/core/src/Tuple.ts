@@ -51,7 +51,9 @@ class Tuple {
   }
 
   negate() {
-    return new Tuple(...this.values.map(value => -value));
+    return new Tuple(
+      ...this.values.map(value => (value === 0 ? value : -value)),
+    );
   }
 
   multiply(scalar: number) {

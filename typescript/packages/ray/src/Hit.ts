@@ -3,9 +3,8 @@ import Intersection from './Intersection';
 class Hit {
   private readonly intersection: Intersection;
 
-  private constructor(intersection: Intersection) {
+  protected constructor(intersection: Intersection) {
     this.intersection = intersection;
-    Object.freeze(this);
   }
 
   get t(): number {

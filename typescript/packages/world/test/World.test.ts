@@ -35,4 +35,16 @@ describe('World tests', () => {
     expect(intersections[2].t).toBe(5.5);
     expect(intersections[3].t).toBe(6);
   });
+
+  it('Precomputes the state of an intersection', () => {
+    const world = new World(light, [sphere1, sphere2]);
+    const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
+
+    const intersections = world.intersect(ray);
+    const hit = world.prepareHit(ray, intersections[0]);
+
+    expect(hit.point).toEqual(new Point(0, 0, -1));
+    expect(hit.eyeVector).toEqual(new Vector3D(0, 0, -1));
+    expect(hit.normalVector).toEqual(new Vector3D(0, 0, -1));
+  });
 });
