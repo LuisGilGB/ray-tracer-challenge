@@ -40,6 +40,14 @@ class Color {
     return new Color(color.red, color.green, color.blue);
   }
 
+  static white(): Color {
+    return new Color(1, 1, 1);
+  }
+
+  static black(): Color {
+    return new Color(0, 0, 0);
+  }
+
   clone(): Color {
     return new Color(this.red, this.green, this.blue);
   }

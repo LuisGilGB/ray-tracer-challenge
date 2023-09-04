@@ -13,21 +13,21 @@ describe('World tests', () => {
     diffuse: 0.7,
     specular: 0.2,
   });
-  const sphere1 = new Sphere(center, 1, material);
-  const sphere2 = Sphere.unitSphere().cloneWith({
+  const outerSphere = new Sphere(center, 1, material);
+  const innerSphere = Sphere.unitSphere().cloneWith({
     material,
     selfTransform: Scaling3D.scaling(0.5, 0.5, 0.5),
   });
 
   it('Creates a world with the provided light and objects', () => {
-    const world = new World(light, [sphere1, sphere2]);
+    const world = new World(light, [outerSphere, innerSphere]);
 
     expect(world.light).toBe(light);
-    expect(world.objects).toEqual([sphere1, sphere2]);
+    expect(world.objects).toEqual([outerSphere, innerSphere]);
   });
 
   it('Computes intersections of a ray in the world', () => {
-    const world = new World(light, [sphere1, sphere2]);
+    const world = new World(light, [outerSphere, innerSphere]);
     const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
 
     const intersections = world.intersect(ray);
@@ -41,7 +41,7 @@ describe('World tests', () => {
 
   describe('Precomputation tests', () => {
     it('Precomputes the state of an intersection', () => {
-      const world = new World(light, [sphere1, sphere2]);
+      const world = new World(light, [outerSphere, innerSphere]);
       const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
 
       const intersections = world.intersect(ray);
@@ -79,13 +79,16 @@ describe('World tests', () => {
       const intersections = world.intersect(ray);
       const hit = world.prepareHit(ray, intersections[1]);
 
+      expect(hit.point).toEqual(new Point(0, 0, 1));
+      expect(hit.eyeVector).toEqual(new Vector3D(0, 0, -1));
       expect(hit.normalVector).toEqual(new Vector3D(0, 0, -1));
+      expect(hit.inside).toBe(true);
     });
   });
 
   describe('Shading tests', () => {
     it('Computes the color when a ray hits', () => {
-      const world = new World(light, [sphere1, sphere2]);
+      const world = new World(light, [outerSphere, innerSphere]);
       const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
 
       const intersections = world.intersect(ray);
@@ -102,7 +105,7 @@ describe('World tests', () => {
         new Point(0, 0.25, 0),
         new Color(1, 1, 1),
       );
-      const world = new World(insideLight, [sphere1, sphere2]);
+      const world = new World(insideLight, [outerSphere, innerSphere]);
       const ray = new Ray(new Point(0, 0, 0), new Vector3D(0, 0, 1));
 
       const intersections = world.intersect(ray);
@@ -113,6 +116,54 @@ describe('World tests', () => {
 
       color.toArray().forEach((c: number, i: number) => {
         expect(c).toBeCloseTo(expectedColor.toArray()[i]);
+      });
+    });
+
+    describe('Color at tests', () => {
+      it('Computes the color when a ray misses', () => {
+        const world = new World(light, [outerSphere, innerSphere]);
+        const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 1, 0));
+
+        const color = world.colorAt(ray);
+
+        expect(color).toEqual(Color.black());
+      });
+
+      it('Computes the color when a ray hits', () => {
+        const world = new World(light, [outerSphere, innerSphere]);
+        const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
+
+        const color = world.colorAt(ray);
+        const expectedColor = new Color(0.38066, 0.47583, 0.2855);
+
+        color.toArray().forEach((c: number, i: number) => {
+          expect(c).toBeCloseTo(expectedColor.toArray()[i]);
+        });
+      });
+
+      it('Computes the color with an intersection behind the ray', () => {
+        const world = new World(light, [
+          outerSphere.cloneWith({
+            material: new PhongMaterial({
+              ...material,
+              ambient: 1,
+            }),
+          }),
+          innerSphere.cloneWith({
+            material: new PhongMaterial({
+              ...material,
+              ambient: 1,
+            }),
+          }),
+        ]);
+        const ray = new Ray(new Point(0, 0, 0.75), new Vector3D(0, 0, -1));
+
+        const color = world.colorAt(ray);
+        const expectedColor = innerSphere.material.color;
+
+        color.toArray().forEach((c: number, i: number) => {
+          expect(c).toBeCloseTo(expectedColor.toArray()[i]);
+        });
       });
     });
   });

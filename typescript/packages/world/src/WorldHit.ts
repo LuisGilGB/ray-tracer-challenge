@@ -6,6 +6,7 @@ class WorldHit extends Hit {
   private readonly _point: Point;
   private readonly _eyeVector: Vector3D;
   private readonly _normalVector: Vector3D;
+  private readonly _inside: boolean;
 
   protected constructor(params: {
     intersection: Intersection;
@@ -17,6 +18,7 @@ class WorldHit extends Hit {
     this._point = params.point;
     this._eyeVector = params.eyeVector;
     this._normalVector = params.normalVector;
+    this._inside = this._normalVector.dot(this._eyeVector) < 0;
     Object.freeze(this);
   }
 
@@ -33,7 +35,7 @@ class WorldHit extends Hit {
   }
 
   get inside(): boolean {
-    return this._normalVector.dot(this.eyeVector) < 0;
+    return this._inside;
   }
 
   public static fromRayAndIntersection(

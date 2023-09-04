@@ -44,6 +44,16 @@ class World {
       normalVector: hit.normalVector,
     });
   }
+
+  public colorAt(ray: Ray): Color {
+    const intersections = this.intersect(ray);
+    const mainIntersection = intersections.filter(i => i.t >= 0)[0];
+    if (!mainIntersection) {
+      return Color.black();
+    }
+    const hit = this.prepareHit(ray, mainIntersection);
+    return this.shadeHit(hit);
+  }
 }
 
 export default World;
