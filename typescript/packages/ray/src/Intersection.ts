@@ -21,12 +21,15 @@ class Intersection {
   }
 
   public static raySphere(ray: Ray, sphere: Sphere): Intersection[] {
+    const inverseTransform = sphere.selfTransform.getInverse();
+    const transformedRay = ray.transform(inverseTransform);
+
     const sphereCenterToRay = Vector3DFactory.fromPoints(
       sphere.center,
-      ray.origin,
+      transformedRay.origin,
     );
-    const a = ray.direction.dot(ray.direction);
-    const b = 2 * ray.direction.dot(sphereCenterToRay);
+    const a = transformedRay.direction.dot(transformedRay.direction);
+    const b = 2 * transformedRay.direction.dot(sphereCenterToRay);
     const c =
       sphereCenterToRay.dot(sphereCenterToRay) - sphere.radius * sphere.radius;
     const discriminant = b * b - 4 * a * c;

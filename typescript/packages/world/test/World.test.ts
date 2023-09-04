@@ -1,4 +1,4 @@
-import {Color, Point, Vector3D} from 'core';
+import {Color, Point, Scaling3D, Vector3D} from 'core';
 import {PointLight} from 'light';
 import {PhongMaterial} from 'material';
 import {Intersection, Ray} from 'ray';
@@ -14,7 +14,10 @@ describe('World tests', () => {
     specular: 0.2,
   });
   const sphere1 = new Sphere(center, 1, material);
-  const sphere2 = new Sphere(center, 0.5, material);
+  const sphere2 = Sphere.unitSphere().cloneWith({
+    material,
+    selfTransform: Scaling3D.scaling(0.5, 0.5, 0.5),
+  });
 
   it('Creates a world with the provided light and objects', () => {
     const world = new World(light, [sphere1, sphere2]);

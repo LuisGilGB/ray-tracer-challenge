@@ -28,6 +28,10 @@ class Transform3D implements ITransform3D {
     return new Transform3D(matrix);
   }
 
+  public static identity(): Transform3D {
+    return new Transform3D();
+  }
+
   public equals(other: Transform3D): boolean {
     return this.matrix.equals(other.matrix);
   }
@@ -48,6 +52,10 @@ class Transform3D implements ITransform3D {
       multipliedVector.at(1),
       multipliedVector.at(2),
     );
+  }
+
+  public getInverse(): Transform3D {
+    return new Transform3D(this.matrix.getInverse());
   }
 }
 

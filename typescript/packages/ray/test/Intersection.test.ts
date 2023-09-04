@@ -1,4 +1,4 @@
-import {Point, Vector3D} from 'core';
+import {Point, Scaling3D, Vector3D} from 'core';
 import {Sphere} from 'shapes';
 import Intersection from '../src/Intersection';
 import Ray from '../src/Ray';
@@ -80,6 +80,21 @@ describe('Intersection tests', () => {
         const sphere = new Sphere(new Point(0, 0, 1), 2);
         const intersections = Intersection.raySphere(ray, sphere);
         expect(intersections.length).toBe(0);
+      });
+
+      describe('Transformed sphere tests', () => {
+        it('should return two intersections when the ray intersects the sphere twice', () => {
+          const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
+          const sphere = Sphere.unitSphere().transform(
+            Scaling3D.scaling(2, 2, 2),
+          );
+          const intersections = Intersection.raySphere(ray, sphere);
+          expect(intersections.length).toBe(2);
+          expect(intersections[0].t).toBe(3);
+          expect(intersections[0].object).toBe(sphere);
+          expect(intersections[1].t).toBe(7);
+          expect(intersections[1].object).toBe(sphere);
+        });
       });
     });
   });
