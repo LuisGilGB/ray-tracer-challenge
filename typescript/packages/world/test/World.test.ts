@@ -1,7 +1,7 @@
 import {Color, Point, Vector3D} from 'core';
 import {PointLight} from 'light';
 import {PhongMaterial} from 'material';
-import {Ray} from 'ray';
+import {Intersection, Ray} from 'ray';
 import {Sphere} from 'shapes';
 import World from '../src/World';
 
@@ -36,15 +36,81 @@ describe('World tests', () => {
     expect(intersections[3].t).toBe(6);
   });
 
-  it('Precomputes the state of an intersection', () => {
-    const world = new World(light, [sphere1, sphere2]);
-    const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
+  describe('Precomputation tests', () => {
+    it('Precomputes the state of an intersection', () => {
+      const world = new World(light, [sphere1, sphere2]);
+      const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
 
-    const intersections = world.intersect(ray);
-    const hit = world.prepareHit(ray, intersections[0]);
+      const intersections = world.intersect(ray);
+      const hit = world.prepareHit(ray, intersections[0]);
 
-    expect(hit.point).toEqual(new Point(0, 0, -1));
-    expect(hit.eyeVector).toEqual(new Vector3D(0, 0, -1));
-    expect(hit.normalVector).toEqual(new Vector3D(0, 0, -1));
+      expect(hit.point).toEqual(new Point(0, 0, -1));
+      expect(hit.eyeVector).toEqual(new Vector3D(0, 0, -1));
+      expect(hit.normalVector).toEqual(new Vector3D(0, 0, -1));
+    });
+
+    it('Precomputes the state of an intersection from the inside', () => {
+      const world = new World(light, [Sphere.unitSphere()]);
+      const ray = new Ray(center, new Vector3D(0, 0, 1));
+
+      const intersections = world.intersect(ray);
+      const hit = world.prepareHit(ray, intersections[1]);
+
+      expect(hit.inside).toBe(true);
+    });
+
+    it('Precomputes the state of an intersection from the outside', () => {
+      const world = new World(light, [Sphere.unitSphere()]);
+      const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
+
+      const intersections = world.intersect(ray);
+      const hit = world.prepareHit(ray, intersections[0]);
+
+      expect(hit.inside).toBe(false);
+    });
+
+    it('Precomputes the normal vector as inverted when the intersection is inside', () => {
+      const world = new World(light, [Sphere.unitSphere()]);
+      const ray = new Ray(center, new Vector3D(0, 0, 1));
+
+      const intersections = world.intersect(ray);
+      const hit = world.prepareHit(ray, intersections[1]);
+
+      expect(hit.normalVector).toEqual(new Vector3D(0, 0, -1));
+    });
+  });
+
+  describe('Shading tests', () => {
+    it('Computes the color when a ray hits', () => {
+      const world = new World(light, [sphere1, sphere2]);
+      const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
+
+      const intersections = world.intersect(ray);
+      const color = world.shadeHit(world.prepareHit(ray, intersections[0]));
+      const expectedColor = new Color(0.38066, 0.47583, 0.2855);
+
+      color.toArray().forEach((c: number, i: number) => {
+        expect(c).toBeCloseTo(expectedColor.toArray()[i]);
+      });
+    });
+
+    it('Computes the color when a ray hits from the inside', () => {
+      const insideLight = new PointLight(
+        new Point(0, 0.25, 0),
+        new Color(1, 1, 1),
+      );
+      const world = new World(insideLight, [sphere1, sphere2]);
+      const ray = new Ray(new Point(0, 0, 0), new Vector3D(0, 0, 1));
+
+      const intersections = world.intersect(ray);
+      const color = world.shadeHit(
+        world.prepareHit(ray, intersections.find(i => i.t > 0) as Intersection),
+      );
+      const expectedColor = new Color(0.90498, 0.90498, 0.90498);
+
+      color.toArray().forEach((c: number, i: number) => {
+        expect(c).toBeCloseTo(expectedColor.toArray()[i]);
+      });
+    });
   });
 });

@@ -29,7 +29,11 @@ class WorldHit extends Hit {
   }
 
   get normalVector(): Vector3D {
-    return this._normalVector;
+    return this.inside ? this._normalVector.negate() : this._normalVector;
+  }
+
+  get inside(): boolean {
+    return this._normalVector.dot(this.eyeVector) < 0;
   }
 
   public static fromRayAndIntersection(

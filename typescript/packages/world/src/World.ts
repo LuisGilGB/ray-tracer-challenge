@@ -1,5 +1,6 @@
+import {Color} from 'core';
 import {PointLight} from 'light';
-import {Intersection, Ray} from 'ray';
+import {Intersection, Lighting, Ray} from 'ray';
 import {Sphere} from 'shapes';
 import WorldHit from './WorldHit';
 
@@ -32,6 +33,16 @@ class World {
 
   public prepareHit(ray: Ray, intersection: Intersection): WorldHit {
     return WorldHit.fromRayAndIntersection(ray, intersection);
+  }
+
+  public shadeHit(hit: WorldHit): Color {
+    return Lighting.lighting({
+      material: hit.object.material,
+      light: this.light,
+      position: hit.point,
+      eyeVector: hit.eyeVector,
+      normalVector: hit.normalVector,
+    });
   }
 }
 

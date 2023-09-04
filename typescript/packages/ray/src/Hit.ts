@@ -1,3 +1,4 @@
+import {Sphere} from 'shapes';
 import Intersection from './Intersection';
 
 class Hit {
@@ -9,6 +10,10 @@ class Hit {
 
   get t(): number {
     return this.intersection.t;
+  }
+
+  get object(): Sphere {
+    return this.intersection.object as Sphere;
   }
 
   static fromIntersections(intersections: Intersection[]): Hit | null {
