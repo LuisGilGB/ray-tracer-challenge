@@ -15,7 +15,7 @@ describe('World tests', () => {
   });
   const outerSphere = new Sphere(center, 1, material);
   const innerSphere = Sphere.unitSphere().cloneWith({
-    material,
+    material: new PhongMaterial(),
     selfTransform: Scaling3D.scaling(0.5, 0.5, 0.5),
   });
 

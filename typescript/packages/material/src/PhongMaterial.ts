@@ -67,6 +67,18 @@ class PhongMaterial {
     });
   }
 
+  public cloneWith(
+    params: Partial<PhongMaterialCreationParams>,
+  ): PhongMaterial {
+    return new PhongMaterial({
+      color: params.color ?? this._color,
+      ambient: params.ambient ?? this._ambient,
+      diffuse: params.diffuse ?? this._diffuse,
+      specular: params.specular ?? this._specular,
+      shininess: params.shininess ?? this._shininess,
+    });
+  }
+
   public equals(other: PhongMaterial): boolean {
     return (
       this._color.equals(other._color) &&
