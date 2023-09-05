@@ -26,6 +26,13 @@
       ],
       "outputs": [
         "coverage/**"
+      ],
+      "outputMode": "hash-only"
+    },
+    "test:watch": {
+      "cache": false,
+      "outputs": [
+        "coverage/**"
       ]
     }
   }
