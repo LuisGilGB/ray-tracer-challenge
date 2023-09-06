@@ -41,6 +41,10 @@ class Point {
     return new Point(point.x, point.y, point.z);
   }
 
+  static origin(): Point {
+    return new Point(0, 0, 0);
+  }
+
   format(): string {
     return `(${this.tuple.format()})`;
   }

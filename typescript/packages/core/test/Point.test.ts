@@ -39,6 +39,13 @@ describe('Point tests', () => {
       expect(clone.y).toBe(2);
       expect(clone.z).toBe(3);
     });
+
+    it('should create the origin point', () => {
+      const origin = Point.origin();
+      expect(origin.x).toBe(0);
+      expect(origin.y).toBe(0);
+      expect(origin.z).toBe(0);
+    });
   });
 
   describe('equality', () => {
