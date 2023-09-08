@@ -1,8 +1,10 @@
-import {Color, Point, Scaling3D, Vector3D} from 'core';
+import {Canvas, Color, Point, Scaling3D, Vector3D} from 'core';
 import {PointLight} from 'light';
 import {PhongMaterial} from 'material';
 import {Intersection, Ray} from 'ray';
 import {Sphere} from 'shapes';
+import Camera from '../src/Camera';
+import ViewTransform from '../src/ViewTransform';
 import World from '../src/World';
 
 describe('World tests', () => {
@@ -165,6 +167,32 @@ describe('World tests', () => {
           expect(c).toBeCloseTo(expectedColor.toArray()[i]);
         });
       });
+    });
+  });
+
+  describe('Render tests', () => {
+    it('Renders a world', () => {
+      const world = new World(light, [outerSphere, innerSphere]);
+      const camera = new Camera({
+        hSize: 11,
+        vSize: 11,
+        fieldOfView: Math.PI / 2,
+        transform: ViewTransform.build(
+          new Point(0, 0, -5),
+          new Point(0, 0, 0),
+          new Vector3D(0, 1, 0),
+        ),
+      });
+
+      const canvas: Canvas = world.render(camera);
+      const expectedColor = new Color(0.38066, 0.47583, 0.2855);
+
+      canvas
+        .getPixel(5, 5)
+        .toArray()
+        .forEach((c: number, i: number) => {
+          expect(c).toBeCloseTo(expectedColor.toArray()[i]);
+        });
     });
   });
 });

@@ -1,7 +1,8 @@
-import {Color} from 'core';
+import {Canvas, Color} from 'core';
 import {PointLight} from 'light';
 import {Intersection, Lighting, Ray} from 'ray';
 import {Sphere} from 'shapes';
+import Camera from './Camera';
 import WorldHit from './WorldHit';
 
 class World {
@@ -53,6 +54,16 @@ class World {
     }
     const hit = this.prepareHit(ray, mainIntersection);
     return this.shadeHit(hit);
+  }
+
+  public render(camera: Camera): Canvas {
+    const canvas = new Canvas(camera.hSize, camera.vSize);
+    canvas.forEachPixel((x, y) => {
+      const ray = camera.rayForPixel(x, y);
+      const color = this.colorAt(ray);
+      canvas.writePixel(x, y, color);
+    });
+    return canvas;
   }
 }
 
