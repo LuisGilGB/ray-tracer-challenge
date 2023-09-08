@@ -172,6 +172,52 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
+  typescript/apps/spheres-room:
+    dependencies:
+      core:
+        specifier: workspace:*
+        version: link:../../packages/core
+      light:
+        specifier: workspace:*
+        version: link:../../packages/light
+      material:
+        specifier: workspace:*
+        version: link:../../packages/material
+      shapes:
+        specifier: workspace:*
+        version: link:../../packages/shapes
+      world:
+        specifier: workspace:*
+        version: link:../../packages/world
+    devDependencies:
+      '@swc/core':
+        specifier: ^1.3.78
+        version: 1.3.78
+      '@swc/jest':
+        specifier: ^0.2.29
+        version: 0.2.29(@swc/core@1.3.78)
+      '@types/jest':
+        specifier: ^29.5.4
+        version: 29.5.4
+      '@types/node':
+        specifier: ^20.5.4
+        version: 20.5.4
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:../../packages/eslint-config-custom
+      jest:
+        specifier: ^29.6.4
+        version: 29.6.4(@types/node@20.5.4)(ts-node@10.9.1)
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.1(@swc/core@1.3.78)(@types/node@20.5.4)(typescript@5.2.2)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
   typescript/packages/core:
     devDependencies:
       '@swc/core':

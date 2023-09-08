@@ -1,0 +1,31 @@
+{
+  "name": "spheres-room",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "core": "workspace:*",
+    "light": "workspace:*",
+    "material": "workspace:*",
+    "shapes": "workspace:*",
+    "world": "workspace:*"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.3.78",
+    "@swc/jest": "^0.2.29",
+    "@types/jest": "^29.5.4",
+    "@types/node": "^20.5.4",
+    "eslint-config-custom": "workspace:*",
+    "jest": "^29.6.4",
+    "ts-node": "^10.9.1",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.2.2"
+  }
+}
