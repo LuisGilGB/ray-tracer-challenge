@@ -1,4 +1,11 @@
-import {Point, Scaling3D, Vector3D} from 'core';
+import {
+  Point,
+  Rotation3D,
+  Scaling3D,
+  Transform3DPipeline,
+  Translation3D,
+  Vector3D,
+} from 'core';
 import {Sphere} from 'shapes';
 import Intersection from '../src/Intersection';
 import Ray from '../src/Ray';
@@ -93,6 +100,33 @@ describe('Intersection tests', () => {
           expect(intersections[0].t).toBe(3);
           expect(intersections[0].object).toBe(sphere);
           expect(intersections[1].t).toBe(7);
+          expect(intersections[1].object).toBe(sphere);
+        });
+
+        it('should return no intersections when the ray misses to intersect a translated sphere', () => {
+          const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
+          const sphere = Sphere.unitSphere().transform(
+            Translation3D.translation(5, 0, 0),
+          );
+          const intersections = Intersection.raySphere(ray, sphere);
+          expect(intersections.length).toBe(0);
+        });
+
+        it('should return the expected intersections when the ray intersects a scaled and rotated sphere', () => {
+          const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
+          const sphere = Sphere.unitSphere().transform(
+            Transform3DPipeline.init()
+              .pipe(
+                Scaling3D.scaling(0.5, 0.5, 2),
+                Rotation3D.rotationX(Math.PI / 4),
+              )
+              .value(),
+          );
+          const intersections = Intersection.raySphere(ray, sphere);
+          expect(intersections.length).toBe(2);
+          expect(intersections[0].t).toBe(4.5);
+          expect(intersections[0].object).toBe(sphere);
+          expect(intersections[1].t).toBe(5.5);
           expect(intersections[1].object).toBe(sphere);
         });
       });
