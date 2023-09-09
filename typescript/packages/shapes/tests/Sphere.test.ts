@@ -124,8 +124,8 @@ describe('Sphere tests', () => {
         .transform(
           Transform3DPipeline.init()
             .pipe(
-              Scaling3D.scaling(1, 0.5, 1),
               Rotation3D.rotationZ(Math.PI / 5),
+              Scaling3D.scaling(1, 0.5, 1),
             )
             .value(),
         )

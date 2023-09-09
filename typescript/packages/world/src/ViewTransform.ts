@@ -25,7 +25,8 @@ abstract class ViewTransform {
     const translation = Translation3D.translation(-from.x, -from.y, -from.z);
 
     return Transform3DPipeline.init()
-      .pipe(orientationTransform, translation)
+      .andThen(translation)
+      .andThen(orientationTransform)
       .value();
   }
 }

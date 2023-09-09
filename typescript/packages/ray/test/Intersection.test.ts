@@ -118,7 +118,7 @@ describe('Intersection tests', () => {
             Transform3DPipeline.init()
               .pipe(
                 Scaling3D.scaling(0.5, 0.5, 2),
-                Rotation3D.rotationX(Math.PI / 4),
+                Rotation3D.rotationX(Math.PI / 2),
               )
               .value(),
           );

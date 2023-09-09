@@ -26,10 +26,10 @@ const main = () => {
     material: floor.material,
     selfTransform: Transform3DPipeline.init()
       .pipe(
-        Translation3D.translation(0, 0, 5),
-        Rotation3D.rotationY(-Math.PI / 4),
-        Rotation3D.rotationX(Math.PI / 2),
         Scaling3D.scaling(10, 0.01, 10),
+        Rotation3D.rotationX(Math.PI / 2),
+        Rotation3D.rotationY(-Math.PI / 4),
+        Translation3D.translation(0, 0, 5),
       )
       .value(),
   });
@@ -38,10 +38,10 @@ const main = () => {
     material: floor.material,
     selfTransform: Transform3DPipeline.init()
       .pipe(
-        Translation3D.translation(0, 0, 5),
-        Rotation3D.rotationY(Math.PI / 4),
-        Rotation3D.rotationX(Math.PI / 2),
         Scaling3D.scaling(10, 0.01, 10),
+        Rotation3D.rotationX(Math.PI / 2),
+        Rotation3D.rotationY(Math.PI / 4),
+        Translation3D.translation(0, 0, 5),
       )
       .value(),
   });
@@ -63,8 +63,8 @@ const main = () => {
     }),
     selfTransform: Transform3DPipeline.init()
       .pipe(
-        Translation3D.translation(1.5, 0.5, -0.5),
         Scaling3D.scaling(0.5, 0.5, 0.5),
+        Translation3D.translation(1.5, 0.5, -0.5),
       )
       .value(),
   });
@@ -77,8 +77,8 @@ const main = () => {
     }),
     selfTransform: Transform3DPipeline.init()
       .pipe(
-        Translation3D.translation(-1.5, 0.33, -0.75),
         Scaling3D.scaling(0.33, 0.33, 0.33),
+        Translation3D.translation(-1.5, 0.33, -0.75),
       )
       .value(),
   });
@@ -93,13 +93,20 @@ const main = () => {
     vSize: 50,
     fieldOfView: Math.PI / 3,
     transform: ViewTransform.build(
-      new Point(1, 2, -5),
+      new Point(0, 1.5, -5),
       new Point(0, 1, 0),
       new Vector3D(0, 1, 0),
     ),
   });
 
-  const world = new World(lightSource, [leftSphere]);
+  const world = new World(lightSource, [
+    floor,
+    leftWall,
+    rightWall,
+    middleSphere,
+    rightSphere,
+    leftSphere,
+  ]);
 
   const canvas = world.render(camera);
 

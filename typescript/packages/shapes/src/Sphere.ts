@@ -1,7 +1,6 @@
 import {
   Point,
   Transform3D,
-  Transform3DPipeline,
   Tuple,
   Tuple3D,
   Vector3D,
@@ -27,8 +26,7 @@ class Sphere {
     this._center = center || DEFAULT_CENTER;
     this._radius = radius || DEFAULT_RADIUS;
     this._material = material || new PhongMaterial();
-    this._selfTransform =
-      selfTransform || Transform3DPipeline.identity().value();
+    this._selfTransform = selfTransform || Transform3D.identity();
     Object.freeze(this);
   }
 

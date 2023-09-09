@@ -11,7 +11,7 @@ class Transform3DPipeline {
   }
 
   public get matrix(): Matrix {
-    return this.transformations.reduce(
+    return this.transformations.reduceRight(
       (acc, transformation) => acc.multiply(transformation.matrix),
       Matrix.identity(4),
     );

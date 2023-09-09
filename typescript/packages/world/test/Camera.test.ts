@@ -85,8 +85,8 @@ describe('Camera tests', () => {
         fieldOfView: Math.PI / 2,
         transform: Transform3DPipeline.init()
           .pipe(
-            Rotation3D.rotationY(Math.PI / 4),
             Translation3D.translation(0, -2, 5),
+            Rotation3D.rotationY(Math.PI / 4),
           )
           .value(),
       });
