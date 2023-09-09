@@ -7,6 +7,8 @@ import Vector3D from '../Vector3D';
 export interface ITransform3D {
   matrix: Matrix;
 
+  getInverse(): ITransform3D;
+
   transformPoint(point: Point): Point;
 
   transformVector(vector: Vector3D): Vector3D;

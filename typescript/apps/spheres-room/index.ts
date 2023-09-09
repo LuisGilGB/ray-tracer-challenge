@@ -14,16 +14,18 @@ import {Sphere} from 'shapes';
 import {Camera, ViewTransform, World} from 'world';
 
 const main = () => {
+  const wallMaterial = new PhongMaterial({
+    color: new Color(1, 0.9, 0.9),
+    specular: 0,
+  });
+
   const floor = Sphere.unitSphere().cloneWith({
-    material: new PhongMaterial({
-      color: new Color(1, 0.9, 0.9),
-      specular: 0,
-    }),
+    material: wallMaterial,
     selfTransform: Scaling3D.scaling(10, 0.01, 10),
   });
 
   const leftWall = Sphere.unitSphere().cloneWith({
-    material: floor.material,
+    material: wallMaterial,
     selfTransform: Transform3DPipeline.init()
       .pipe(
         Scaling3D.scaling(10, 0.01, 10),
@@ -35,7 +37,7 @@ const main = () => {
   });
 
   const rightWall = Sphere.unitSphere().cloneWith({
-    material: floor.material,
+    material: wallMaterial,
     selfTransform: Transform3DPipeline.init()
       .pipe(
         Scaling3D.scaling(10, 0.01, 10),

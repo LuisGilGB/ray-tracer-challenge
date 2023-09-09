@@ -49,6 +49,10 @@ class Reflection3D implements ITransform3D {
   public transformVector(vector: Vector3D): Vector3D {
     return this.reflectVector(vector);
   }
+
+  public getInverse(): ITransform3D {
+    return this._scaling.getInverse();
+  }
 }
 
 export default Reflection3D;

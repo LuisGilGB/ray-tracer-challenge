@@ -53,4 +53,20 @@ describe('3D transformations pipeline tests', () => {
     );
     expect(pipeline.transformPoint(point)).toEqual(new Point(15, 0, 7));
   });
+
+  it('should be able to calculate the inverse transformation pipeline', () => {
+    const point = new Point(1, 0, 1);
+    const pipeline = Transform3DPipeline.init().pipe(
+      Rotation3D.rotationX(Math.PI / 2),
+      Scaling3D.scaling(5, 5, 5),
+      Translation3D.translation(10, 5, 7),
+    );
+    const transformedPoint = pipeline.transformPoint(point);
+    const inversePipeline = pipeline.inverse();
+    const restoredPoint = inversePipeline.transformPoint(transformedPoint);
+
+    restoredPoint.toArray().forEach((value, i) => {
+      expect(value).toBeCloseTo(point.toArray()[i]);
+    });
+  });
 });

@@ -27,6 +27,15 @@ class Transform3DPipeline {
     );
   }
 
+  public static fromTransforms(
+    transforms: ITransform3D[],
+  ): Transform3DPipeline {
+    return transforms.reduce(
+      (pipeline: Transform3DPipeline, transform) => pipeline.andThen(transform),
+      Transform3DPipeline.init(),
+    );
+  }
+
   public andThen(transformation: ITransform3D): Transform3DPipeline {
     this.transformations.push(transformation);
     return this;
@@ -35,6 +44,14 @@ class Transform3DPipeline {
   public pipe(...transformations: ITransform3D[]): Transform3DPipeline {
     this.transformations.push(...transformations);
     return this;
+  }
+
+  public inverse(): Transform3DPipeline {
+    return Transform3DPipeline.fromTransforms(
+      this.transformations
+        .map(transformation => transformation.getInverse())
+        .reverse(),
+    );
   }
 
   public value(): Transform3D {
