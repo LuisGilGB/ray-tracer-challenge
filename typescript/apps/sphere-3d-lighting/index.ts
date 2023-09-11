@@ -1,4 +1,12 @@
-import {Canvas, Color, Point, Translation3D, Tuple3D} from 'core';
+import {
+  Canvas,
+  Color,
+  Point,
+  Scaling3D,
+  Transform3DPipeline,
+  Translation3D,
+  Tuple3D,
+} from 'core';
 import * as fs from 'fs';
 import {PointLight} from 'light';
 import {PhongMaterial} from 'material';
@@ -7,7 +15,7 @@ import {Sphere} from 'shapes';
 import {getRaysToCanvas} from './utils';
 
 const main = () => {
-  const size = 1200;
+  const size = 200;
   const canvas = new Canvas(size, size);
   const halfSize = Math.floor(size / 2);
 
@@ -15,24 +23,25 @@ const main = () => {
     new Tuple3D(halfSize, halfSize, 0),
   );
 
-  const horizonDistance = 1000;
+  const horizonDistance = size * 0.75;
   const sphereDistance = horizonDistance * 0.8;
-  const sphereRadius = 200;
+  const sphereRadius = size * 0.25;
 
   const rays = getRaysToCanvas(canvas, horizonDistance);
 
-  const sphere = new Sphere(
-    centerTranslation.transformPoint(new Point(0, 0, sphereDistance)),
-    sphereRadius,
-    new PhongMaterial({
+  const sphere = Sphere.unitSphere().cloneWith({
+    material: new PhongMaterial({
       color: new Color(1, 0.2, 1),
     }),
-  );
+    selfTransform: Transform3DPipeline.init()
+      .pipe(
+        Scaling3D.scaling(sphereRadius, sphereRadius, sphereRadius),
+        Translation3D.translation(0, 0, sphereDistance),
+      )
+      .value(),
+  });
 
-  const light = new PointLight(
-    new Point(-100, -100, -1000),
-    new Color(1, 1, 1),
-  );
+  const light = new PointLight(new Point(-10, -10, -300), new Color(1, 1, 1));
 
   rays.forEach((ray, i) => {
     const intersections = Intersection.raySphere(ray, sphere);
