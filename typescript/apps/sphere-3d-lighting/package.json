@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "tsx index.ts",
+    "typecheck": "tsc --noEmit",
     "test": "jest"
   },
   "keywords": [],
@@ -24,8 +25,9 @@
     "@types/node": "^20.10.4",
     "eslint-config-custom": "workspace:*",
     "jest": "^29.7.0",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "tsconfig": "workspace:*",
-    "typescript": "^5.2.2"
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3"
   }
 }
