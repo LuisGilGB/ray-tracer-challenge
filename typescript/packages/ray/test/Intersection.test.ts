@@ -64,7 +64,14 @@ describe('Intersection tests', () => {
     describe('Non unit sphere tests', () => {
       it('should return two intersections when the ray intersects the sphere twice', () => {
         const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
-        const sphere = new Sphere(new Point(0, 0, 1), 2);
+        const sphere = Sphere.unitSphere().transform(
+          Transform3DPipeline.init()
+            .pipe(
+              Scaling3D.scaling(2, 2, 2),
+              Translation3D.translation(0, 0, 1),
+            )
+            .value(),
+        );
         const intersections = Intersection.raySphere(ray, sphere);
         expect(intersections.length).toBe(2);
         expect(intersections[0].t).toBe(4);
@@ -75,7 +82,14 @@ describe('Intersection tests', () => {
 
       it('should return one intersection when the ray intersects the sphere only as a tangent', () => {
         const ray = new Ray(new Point(0, 2, -5), new Vector3D(0, 0, 1));
-        const sphere = new Sphere(new Point(0, 0, 1), 2);
+        const sphere = Sphere.unitSphere().transform(
+          Transform3DPipeline.init()
+            .pipe(
+              Scaling3D.scaling(2, 2, 2),
+              Translation3D.translation(0, 0, 1),
+            )
+            .value(),
+        );
         const intersections = Intersection.raySphere(ray, sphere);
         expect(intersections.length).toBe(1);
         expect(intersections[0].t).toBe(6);
