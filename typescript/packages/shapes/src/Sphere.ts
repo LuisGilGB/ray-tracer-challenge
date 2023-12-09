@@ -30,6 +30,14 @@ class Sphere {
     Object.freeze(this);
   }
 
+  static get DEFAULT_CENTER(): Point {
+    return DEFAULT_CENTER;
+  }
+
+  static get DEFAULT_RADIUS(): number {
+    return DEFAULT_RADIUS;
+  }
+
   get center(): Point {
     return this.selfTransform.transformPoint(this._center);
   }

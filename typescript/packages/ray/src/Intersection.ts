@@ -24,14 +24,15 @@ class Intersection {
     const inverseTransform = sphere.selfTransform.getInverse();
     const transformedRay = ray.transform(inverseTransform);
 
-    const sphereCenterToRay = Vector3DFactory.fromPoints(
-      sphere.center,
+    const sphereCenterToRayOrigin = Vector3DFactory.fromPoints(
+      Sphere.DEFAULT_CENTER,
       transformedRay.origin,
     );
     const a = transformedRay.direction.dot(transformedRay.direction);
-    const b = 2 * transformedRay.direction.dot(sphereCenterToRay);
+    const b = 2 * transformedRay.direction.dot(sphereCenterToRayOrigin);
     const c =
-      sphereCenterToRay.dot(sphereCenterToRay) - sphere.radius * sphere.radius;
+      sphereCenterToRayOrigin.dot(sphereCenterToRayOrigin) -
+      Sphere.DEFAULT_RADIUS;
     const discriminant = b * b - 4 * a * c;
     if (discriminant < 0) {
       return [];
