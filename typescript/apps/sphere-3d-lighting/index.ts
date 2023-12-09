@@ -2,6 +2,7 @@ import {
   Canvas,
   Color,
   Point,
+  Rotation3D,
   Scaling3D,
   Transform3DPipeline,
   Translation3D,
@@ -35,13 +36,20 @@ const main = () => {
     }),
     selfTransform: Transform3DPipeline.init()
       .pipe(
-        Scaling3D.scaling(sphereRadius, sphereRadius, sphereRadius),
+        Scaling3D.scaling(sphereRadius, sphereRadius / 2, sphereRadius / 2),
+        Rotation3D.rotationX(-Math.PI / 4),
+        Rotation3D.rotationY(Math.PI / 5),
+        Rotation3D.rotationZ(Math.PI / 5),
+        centerTranslation,
         Translation3D.translation(0, 0, sphereDistance),
       )
       .value(),
   });
 
-  const light = new PointLight(new Point(-10, -10, -300), new Color(1, 1, 1));
+  console.log('Sphere: ', sphere);
+  console.log('Sphere center: ', sphere.center.toArray());
+
+  const light = new PointLight(new Point(-10, 10, -10), Color.white());
 
   rays.forEach((ray, i) => {
     const intersections = Intersection.raySphere(ray, sphere);
