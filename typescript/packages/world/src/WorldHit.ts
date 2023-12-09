@@ -7,6 +7,7 @@ class WorldHit extends Hit {
   private readonly _eyeVector: Vector3D;
   private readonly _normalVector: Vector3D;
   private readonly _inside: boolean;
+  private readonly _overPoint: Point;
 
   protected constructor(params: {
     intersection: Intersection;
@@ -15,10 +16,12 @@ class WorldHit extends Hit {
     normalVector: Vector3D;
   }) {
     super(params.intersection);
+    const EPSILON = 0.00001;
     this._point = params.point;
     this._eyeVector = params.eyeVector;
     this._normalVector = params.normalVector;
     this._inside = this._normalVector.dot(this._eyeVector) < 0;
+    this._overPoint = this.point.addVector(this.normalVector.multiply(EPSILON));
     Object.freeze(this);
   }
 
@@ -32,6 +35,10 @@ class WorldHit extends Hit {
 
   get normalVector(): Vector3D {
     return this.inside ? this._normalVector.negate() : this._normalVector;
+  }
+
+  get overPoint(): Point {
+    return this._overPoint;
   }
 
   get inside(): boolean {

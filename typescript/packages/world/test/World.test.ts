@@ -1,4 +1,4 @@
-import {Canvas, Color, Point, Scaling3D, Vector3D} from 'core';
+import {Canvas, Color, Point, Scaling3D, Translation3D, Vector3D} from 'core';
 import {PointLight} from 'light';
 import {PhongMaterial} from 'material';
 import {Intersection, Ray} from 'ray';
@@ -86,6 +86,18 @@ describe('World tests', () => {
       expect(hit.normalVector).toEqual(new Vector3D(0, 0, -1));
       expect(hit.inside).toBe(true);
     });
+
+    it('Returns an over point that comes from the offset of the point', () => {
+      const ray = new Ray(new Point(0, 0, -5), new Vector3D(0, 0, 1));
+      const world = new World(light, [
+        Sphere.unitSphere().transform(Translation3D.translation(0, 0, 1)),
+      ]);
+      const intersections = world.intersect(ray);
+      const hit = world.prepareHit(ray, intersections[0]);
+
+      expect(hit.overPoint.z).toBeLessThan(-Number.EPSILON / 2);
+      expect(hit.point.z).toBeGreaterThan(hit.overPoint.z);
+    });
   });
 
   describe('Shading tests', () => {
@@ -118,6 +130,36 @@ describe('World tests', () => {
 
       color.toArray().forEach((c: number, i: number) => {
         expect(c).toBeCloseTo(expectedColor.toArray()[i]);
+      });
+    });
+
+    describe('Shadow tests', () => {
+      it('Shadows an intersection', () => {
+        const world = new World(light, [Sphere.unitSphere()]);
+        const point = new Point(0, 10, 0);
+
+        expect(world.isShadowedAt(point)).toBe(false);
+      });
+
+      it('Does not shadow an intersection', () => {
+        const world = new World(light, [Sphere.unitSphere()]);
+        const point = new Point(10, -10, 10);
+
+        expect(world.isShadowedAt(point)).toBe(true);
+      });
+
+      it('Does not shadow an intersection between the point and the light', () => {
+        const world = new World(light, [Sphere.unitSphere()]);
+        const point = new Point(-20, 20, -20);
+
+        expect(world.isShadowedAt(point)).toBe(false);
+      });
+
+      it('Does not shadow an intersection between the light and the point', () => {
+        const world = new World(light, [Sphere.unitSphere()]);
+        const point = new Point(-2, 2, -2);
+
+        expect(world.isShadowedAt(point)).toBe(false);
       });
     });
 
@@ -162,6 +204,22 @@ describe('World tests', () => {
 
         const color = world.colorAt(ray);
         const expectedColor = innerSphere.material.color;
+
+        color.toArray().forEach((c: number, i: number) => {
+          expect(c).toBeCloseTo(expectedColor.toArray()[i]);
+        });
+      });
+
+      it('Computes the hit color in shadow', () => {
+        const light = new PointLight(new Point(0, 0, -10), new Color(1, 1, 1));
+        const world = new World(light, [
+          Sphere.unitSphere().transform(Translation3D.translation(0, 0, 10)),
+        ]);
+        const ray = new Ray(new Point(0, 0, 5), new Vector3D(0, 0, 1));
+
+        const intersections = world.intersect(ray);
+        const color = world.shadeHit(world.prepareHit(ray, intersections[0]));
+        const expectedColor = new Color(0.1, 0.1, 0.1);
 
         color.toArray().forEach((c: number, i: number) => {
           expect(c).toBeCloseTo(expectedColor.toArray()[i]);

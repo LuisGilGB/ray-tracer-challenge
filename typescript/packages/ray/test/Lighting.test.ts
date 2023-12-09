@@ -87,5 +87,22 @@ describe('Lighting tests', () => {
       });
       expect(result).toEqual(new Color(0.1, 0.1, 0.1));
     });
+
+    it('Lighting with the surface in shadow', () => {
+      const position = new Point(0, 0, 0);
+      const eyeVector = new Vector3D(0, 0, -1);
+      const normalVector = new Vector3D(0, 0, -1);
+      const light = new PointLight(new Point(0, 0, -10), new Color(1, 1, 1));
+      const inShadow = true;
+      const result = Lighting.lighting({
+        material,
+        light,
+        position,
+        eyeVector,
+        normalVector,
+        inShadow,
+      });
+      expect(result).toEqual(new Color(0.1, 0.1, 0.1));
+    });
   });
 });

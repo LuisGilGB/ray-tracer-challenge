@@ -15,12 +15,14 @@ class Lighting {
     position,
     eyeVector,
     normalVector,
+    inShadow = false,
   }: {
     material: PhongMaterial;
     light: PointLight;
     position: Point;
     eyeVector: Vector3D;
     normalVector: Vector3D;
+    inShadow?: boolean;
   }): Color {
     // Combine the surface color with the light's color/intensity
     const effectiveColor = material.color.hadamardProduct(light.intensity);
@@ -33,6 +35,10 @@ class Lighting {
 
     // compute the ambient contribution
     const ambient = effectiveColor.multiply(material.ambient);
+    // Returns the ambient color only if the point is in shadow
+    if (inShadow) {
+      return ambient;
+    }
 
     // lightDotNormal represents the cosine of the angle between the
     // light vector and the normal vector. A negative number means the

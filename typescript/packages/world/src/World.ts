@@ -1,6 +1,6 @@
-import {Canvas, Color} from 'core';
+import {Canvas, Color, Point, Vector3DFactory} from 'core';
 import {PointLight} from 'light';
-import {Intersection, Lighting, Ray} from 'ray';
+import {Hit, Intersection, Lighting, Ray} from 'ray';
 import {Sphere} from 'shapes';
 import Camera from './Camera';
 import WorldHit from './WorldHit';
@@ -9,7 +9,7 @@ class World {
   private readonly _light: PointLight;
   private readonly _objects: Sphere[];
 
-  constructor(light: PointLight, objects: Sphere[]) {
+  constructor(light: PointLight, objects: Sphere[] = []) {
     this._light = light;
     this._objects = objects;
   }
@@ -40,9 +40,10 @@ class World {
     return Lighting.lighting({
       material: hit.object.material,
       light: this.light,
-      position: hit.point,
+      position: hit.overPoint,
       eyeVector: hit.eyeVector,
       normalVector: hit.normalVector,
+      inShadow: this.isShadowedAt(hit.overPoint),
     });
   }
 
@@ -54,6 +55,20 @@ class World {
     }
     const hit = this.prepareHit(ray, mainIntersection);
     return this.shadeHit(hit);
+  }
+
+  public isShadowedAt(point: Point): boolean {
+    const distanceToLightVector = Vector3DFactory.fromPoints(
+      point,
+      this.light.position,
+    );
+    const distanceToLight = distanceToLightVector.magnitude();
+    const directionToLight = distanceToLightVector.normalize();
+
+    const rayToLight = new Ray(point, directionToLight);
+    const intersections = this.intersect(rayToLight);
+    const hit = Hit.fromIntersections(intersections);
+    return Boolean(hit && hit.t < distanceToLight);
   }
 
   public render(camera: Camera): Canvas {

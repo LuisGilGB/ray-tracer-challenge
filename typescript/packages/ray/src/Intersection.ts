@@ -13,6 +13,11 @@ class Intersection {
   }
 
   get t(): number {
+    // Round to 5 decimal places to avoid floating point errors
+    const EPSILON = 0.00001;
+    if (Math.abs(this._t) < EPSILON) {
+      return 0;
+    }
     return this._t;
   }
 
