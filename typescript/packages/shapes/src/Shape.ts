@@ -1,4 +1,4 @@
-import {Transform3D} from 'core';
+import {Point, Transform3D, Vector3D} from 'core';
 import {PhongMaterial} from 'material';
 
 abstract class Shape {
@@ -34,6 +34,10 @@ abstract class Shape {
       transform: transform,
     });
   }
+
+  abstract normal(point: Point): Vector3D;
+
+  abstract reflectWithNormal(point: Point, normal: Vector3D): Vector3D;
 }
 
 export default Shape;

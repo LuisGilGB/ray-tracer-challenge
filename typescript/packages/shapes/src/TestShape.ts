@@ -1,4 +1,4 @@
-import {Transform3D} from 'core';
+import {Point, Transform3D, Vector3D} from 'core';
 import {PhongMaterial} from 'material';
 import Shape from './Shape';
 
@@ -23,6 +23,14 @@ class TestShape extends Shape {
       material: params.material ?? this.material,
       transform: params.transform ?? this.selfTransform,
     });
+  }
+
+  normal(point: Point): Vector3D {
+    return new Vector3D(point.x, point.y, point.z);
+  }
+
+  reflectWithNormal(point: Point, normal: Vector3D): Vector3D {
+    return normal;
   }
 }
 

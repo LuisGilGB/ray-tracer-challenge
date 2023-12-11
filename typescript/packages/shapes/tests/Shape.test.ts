@@ -1,4 +1,11 @@
-import {Rotation3D, Scaling3D, Transform3DPipeline, Translation3D} from 'core';
+import {
+  Point,
+  Rotation3D,
+  Scaling3D,
+  Transform3D,
+  Transform3DPipeline,
+  Translation3D,
+} from 'core';
 import {PhongMaterial} from 'material';
 import TestShape from '../src/TestShape';
 
@@ -6,9 +13,7 @@ describe('Shape tests', () => {
   describe('Creation', () => {
     it('should create a shape with the default transform', () => {
       const shape = new TestShape();
-      expect(shape.selfTransform).toEqual(
-        Transform3DPipeline.identity().value(),
-      );
+      expect(shape.selfTransform).toEqual(Transform3D.identity());
     });
 
     it('should create a shape with a given transform', () => {
@@ -35,6 +40,17 @@ describe('Shape tests', () => {
       });
       const shape = new TestShape({material});
       expect(shape.material).toBe(material);
+    });
+  });
+
+  describe('Normal vector computation', () => {
+    it('should return a normalized vector', () => {
+      const shape = new TestShape();
+      const componentSize = Math.sqrt(3) / 3;
+      const normal = shape.normal(
+        new Point(componentSize, componentSize, componentSize),
+      );
+      expect(normal).toEqual(normal.normalize());
     });
   });
 });
