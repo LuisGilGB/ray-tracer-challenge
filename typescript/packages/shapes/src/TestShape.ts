@@ -29,8 +29,8 @@ class TestShape extends Shape {
     return new Vector3D(point.x, point.y, point.z);
   }
 
-  reflectWithNormal(point: Point, normal: Vector3D): Vector3D {
-    return normal;
+  reflectWithNormal(vector: Vector3D, normal: Vector3D): Vector3D {
+    return vector.subtract(normal.multiply(2 * vector.dot(normal)));
   }
 }
 

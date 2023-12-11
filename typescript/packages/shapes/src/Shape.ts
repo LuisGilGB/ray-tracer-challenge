@@ -11,7 +11,6 @@ abstract class Shape {
   }) {
     this._material = params?.material || new PhongMaterial();
     this._selfTransform = params?.transform || Transform3D.identity();
-    Object.freeze(this);
   }
 
   get material(): PhongMaterial {
@@ -31,13 +30,13 @@ abstract class Shape {
 
   transform(transform: Transform3D): Shape {
     return this.cloneWith({
-      transform: transform,
+      transform,
     });
   }
 
   abstract normal(point: Point): Vector3D;
 
-  abstract reflectWithNormal(point: Point, normal: Vector3D): Vector3D;
+  abstract reflectWithNormal(vector: Vector3D, normal: Vector3D): Vector3D;
 }
 
 export default Shape;

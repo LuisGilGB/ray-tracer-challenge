@@ -7,15 +7,14 @@ import {
   Vector3DFactory,
 } from 'core';
 import {PhongMaterial} from 'material';
+import Shape from './Shape';
 
 const DEFAULT_CENTER = new Point(0, 0, 0);
 const DEFAULT_RADIUS = 1;
 
-class Sphere {
+class Sphere extends Shape {
   private readonly _center: Point;
   private readonly _radius: number;
-  private readonly _material: PhongMaterial;
-  private readonly _selfTransform: Transform3D;
 
   constructor(
     center?: Point,
@@ -23,10 +22,9 @@ class Sphere {
     material?: PhongMaterial,
     selfTransform?: Transform3D,
   ) {
+    super({material, transform: selfTransform});
     this._center = center || DEFAULT_CENTER;
     this._radius = radius || DEFAULT_RADIUS;
-    this._material = material || new PhongMaterial();
-    this._selfTransform = selfTransform || Transform3D.identity();
     Object.freeze(this);
   }
 
@@ -59,7 +57,12 @@ class Sphere {
   }
 
   clone(): Sphere {
-    return new Sphere(this._center, this._radius, this._material);
+    return new Sphere(
+      this._center,
+      this._radius,
+      this._material,
+      this._selfTransform,
+    );
   }
 
   cloneWith(params: {
